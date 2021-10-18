@@ -30,9 +30,10 @@ $main-color: #9F0013;
     }
 
     &__item {
-        color: black;
-
-        &_chosen {
+        a {
+            color: black;
+        }
+        &_chosen a {
             color: $main-color;
         }
     }

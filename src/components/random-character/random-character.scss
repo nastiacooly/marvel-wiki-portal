@@ -1,0 +1,91 @@
+@mixin random-block {
+    padding: 35px;
+    width: 50%;
+    max-height: 250px;
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.25);
+}
+
+.random-section {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 50px;
+}
+
+.random-character {
+    @include random-block;
+    background-color: #fff;
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    justify-content: space-between;
+
+    &__name {
+        font-weight: 700;
+        font-size: 22px;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
+    &__details {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    &__descr {
+        margin-bottom: 10px;
+        font-size: 14px;
+    }
+
+    &__links {
+        display: flex;
+        flex-direction: row;
+        gap: 30px;
+    }
+}
+
+.random-choose {
+    @include random-block;
+    background-color: #232222;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+
+    &__text {
+        color: #fff;
+        font-weight: 700;
+        font-size: 24px;
+
+        &_margined {
+            margin-bottom: 17px;
+        }
+    }
+
+    &:after {
+        display: inline-block;
+        content: '';
+        background-image: url('../../static/img/shield.png');
+        background-size: 100px 100px;
+        height: 100px;
+        width: 100px;
+        margin: 0;
+        position: absolute;
+        bottom: 14px;
+        right: 67px;
+    }
+
+    &:before {
+        display: inline-block;
+        content: '';
+        background-image: url('../../static/img/mjolnir.png');
+        background-size: 170px 170px;
+        height: 170px;
+        width: 170px;
+        margin: 0;
+        position: absolute;
+        bottom: 15px;
+        right: -30px;
+    }
+}
