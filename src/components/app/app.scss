@@ -1,9 +1,10 @@
 .app-container {
     padding: 50px 160px;
+    position: relative;
 }
 
 .app-footer {
-    position: fixed;
+    position: absolute;
     bottom: 0;
     right: 0;
     

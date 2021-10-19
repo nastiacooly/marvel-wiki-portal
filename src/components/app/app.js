@@ -1,5 +1,6 @@
 import AppHeader from '../app-header/app-header';
 import RandomSection from '../random-character/random-character';
+import CharactersList from '../characters-list/characters-list';
 
 import vision from '../../static/img/bottom_bg.png';
 
@@ -12,6 +13,8 @@ function App() {
 
       <main>
         <RandomSection />
+
+        <CharactersList />
 
       </main>
 
