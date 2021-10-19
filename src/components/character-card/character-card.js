@@ -1,18 +1,40 @@
+import {Component} from 'react';
+
 import './character-card.scss';
 
-const CharacterCard = (props) => {
+class CharacterCard extends Component {
 
-    return (
-        <div className="character-card">
-            <div className="character-card__image">
-                <img src={props.image} alt="Comics Character Portrait" />
-            </div>
+    constructor(props) {
+        super(props);
+        this.state = {
+            active: false,
+        }
+    }
 
-            <div className="character-card__details">
-                <h3 className="character-card__name">{props.name}</h3>
+    onActivate = () => {
+        this.setState(({active}) => ({
+            active: !active
+        }));
+    }
+
+    render() {
+        let className = "character-card";
+        if (this.state.active) {
+            className += " character-card_active";
+        }
+
+        return (
+            <div className={className} onClick={this.onActivate}>
+                <div className="character-card__image">
+                    <img src={this.props.image} alt="Comics Character Portrait" />
+                </div>
+    
+                <div className="character-card__details">
+                    <h3 className="character-card__name">{this.props.name}</h3>
+                </div>
             </div>
-        </div>
-    );
+        );
+    }
 }
 
 export default CharacterCard;
