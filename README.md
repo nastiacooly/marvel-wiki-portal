@@ -26,10 +26,7 @@ All the information about characters and comics received from [Marvel API](https
 
 1. Download files from repo.
 
-2. Install required packages:
-    ```
-    npm i
-    ```
+2. Install required packages with `npm i` command.
 
 3. Register on [Marvel API](https://developer.marvel.com/) to get your API key.
 
