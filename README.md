@@ -19,3 +19,26 @@ All the information about characters and comics received from [Marvel API](https
 Backend (API): [Marvel API](https://developer.marvel.com/).
 
 Frontend: HTML5, CSS3 (Scss), React.
+
+All the information about characters and comics received from [Marvel API](https://developer.marvel.com/).
+
+## How to run the app?
+
+1. Download files from repo.
+
+2. Install required packages:
+    ```
+    npm i
+    ```
+
+3. Register on [Marvel API](https://developer.marvel.com/) to get your API key.
+
+4. Create 'api-key.js' file in src/services folder with the following code:
+    ```
+    const PublicApiKey = "Your Marvel API public key here";
+    export default PublicApiKey;
+    ```
+
+5. Run the app with `npm start` command.
+
+6. Enjoy!
