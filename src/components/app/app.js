@@ -1,5 +1,5 @@
 import AppHeader from '../app-header/app-header';
-import RandomSection from '../random-character/random-character';
+import RandomCharacter from '../random-character/random-character';
 import CharactersList from '../characters-list/characters-list';
 import CharacterDetails from '../character-details/character-details';
 
@@ -13,7 +13,7 @@ function App() {
       <AppHeader />
 
       <main>
-        <RandomSection />
+        <RandomCharacter />
 
         <div className="characters-container">
           <CharactersList />

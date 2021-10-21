@@ -23,7 +23,7 @@ class MarvelAPIService {
     }
 
     getCharacter = (id) => {
-        if (id.toString().length < 6) {
+        if (id.toString().length < 7) {
             throw new Error('Invalid id of a character');
         }
         return this.getResource(this._apiUrls.singleCharacter + id + "?" + this._apiKeyBase + PublicApiKey);
