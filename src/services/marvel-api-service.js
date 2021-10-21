@@ -18,15 +18,61 @@ class MarvelAPIService {
         return await res.json();
     }
 
-    getAllCharacters = () => {
-        return this.getResource(this._apiUrlsurls.allCharacters);
+    getAllCharacters = async () => {
+        /**
+         * Fetches data from Marvel API
+         * on all characters.
+         * Returns array with all characters with data 
+         * transformed for each character.
+         */
+        const response =  await this.getResource(this._apiUrlsurls.allCharacters);
+        return response.data.results.map(this._transformCharacterData);
     }
 
-    getCharacter = (id) => {
+    getCharacter = async (id) => {
+        /**
+         * Fetches data from Marvel API
+         * on a character by its unique id.
+         * Throws error in case of invalid id.
+         * Returns JS-object with transformed data.
+         */
         if (id.toString().length < 7) {
             throw new Error('Invalid id of a character');
         }
-        return this.getResource(this._apiUrls.singleCharacter + id + "?" + this._apiKeyBase + PublicApiKey);
+        const response = await this.getResource(
+            this._apiUrls.singleCharacter 
+            + id 
+            + "?" 
+            + this._apiKeyBase 
+            + PublicApiKey
+            );
+        const characterMainData = response.data.results[0];
+        return this._transformCharacterData(characterMainData);
+    }
+
+    _transformCharacterData = (character) => {
+        /**
+         * Receives character data object (formed by Marvel API) 
+         * and returns object with transformed character data 
+         */
+
+        /* Validation of character description */
+        const noDescriptionMessage = `
+            Please visit Homepage or Wiki for detailed description of ${character.name}
+            `;
+        let description = character.description || noDescriptionMessage;
+
+        if (description.length >= 235) {
+            description = description.slice(0, 235) + "...";
+        }
+
+        return {
+            name: character.name,
+            description: description,
+            thumbnail: character.thumbnail.path + "." + character.thumbnail.extension,
+            homepage: character.urls[0].url,
+            wiki: character.urls[1].url
+        }
     }
 }
 

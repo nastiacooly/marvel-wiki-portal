@@ -11,44 +11,40 @@ class RandomCharacter extends Component {
         /* Getting random character on opening the app */
         this.getRandomCharacter();
         this.state = {
-            name: null,
-            description: null,
-            thumbnail: null,
-            homepage: null,
-            wiki: null,
+            character: {},
         }
     }
 
-    /****
-        * Initializing property for the component
-        * to communicate with Marvel API
-    ****/
+    onCharacterLoaded = (character) => {
+        /**
+         * Saves character data to state
+         * of this component.
+         */
+        this.setState({character});
+    }
+
+    /**
+     * Initializing property for the component
+     * to communicate with Marvel API
+     */
     marvelService = new MarvelAPIService();
 
     getRandomCharacter = () => {
-    /**** 
-        * Gets data from Marvel API on random character
-        * and saves it to the state of this component.
-    ****/
+        /**
+         * Gets data (object) from Marvel API on random character
+         * and saves it to the state of this component.
+         */
         const maxId = 1011400;
         const minId = 1011000;
         const randomId = Math.floor(minId + Math.random() * (maxId - minId));
 
         this.marvelService
             .getCharacter(randomId)
-            .then(result => {
-                this.setState(({
-                    name: result.data.results[0].name,
-                    description: result.data.results[0].description,
-                    thumbnail: result.data.results[0].thumbnail.path + "." + result.data.results[0].thumbnail.extension,
-                    homepage: result.data.results[0].urls[0].url,
-                    wiki: result.data.results[0].urls[1].url
-                }));
-            });
+            .then(this.onCharacterLoaded);
     }
     
     render() {
-        const {name, description, thumbnail, homepage, wiki} = this.state;
+        const {name, description, thumbnail, homepage, wiki} = this.state.character;
 
         return (
             <section className="random-section">
