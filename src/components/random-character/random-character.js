@@ -3,6 +3,7 @@ import {Fragment} from 'react';
 
 import MarvelAPIService from '../../services/marvel-api-service';
 import Spinner from '../spinner/spinner';
+import ErrorView from '../error-view/error-view';
 
 import '../../button.scss';
 import './random-character.scss';
@@ -15,6 +16,8 @@ class RandomCharacter extends Component {
         this.state = {
             character: {},
             loaded: false,
+            error: false,
+            errorMessage: "",
         }
     }
 
@@ -25,7 +28,19 @@ class RandomCharacter extends Component {
          */
         this.setState({
             character: character,
-            loaded: true
+            loaded: true,
+            error: false
+        });
+    }
+
+    onError = () => {
+        /**
+         * Keeps track of error in the state.
+         */
+        this.setState({
+            loaded: true,
+            error: true,
+            errorMessage: "Something went wrong. Please try again.",
         });
     }
 
@@ -42,7 +57,8 @@ class RandomCharacter extends Component {
          */
         
         this.setState({
-            loaded: false
+            loaded: false,
+            error: false
         })
 
         const maxId = 1011400;
@@ -52,22 +68,23 @@ class RandomCharacter extends Component {
         this.marvelService
             .getCharacter(randomId)
             .then(this.onCharacterLoaded)
-            .catch(() => {
-                this.setState({
-                loaded: false
-                });
-            });
+            .catch(this.onError);
     }
     
     render() {
         const {character} = this.state;
-        const {loaded} = this.state;
+        const {loaded, error, errorMessage} = this.state;
 
         return (
             <section className="random-section">
 
                 <div className="random-character">
-                    {loaded ? <CharacterView character={character}/> : <Spinner/>}
+                    {   
+                        error ? 
+                            <ErrorView message={errorMessage}/> : 
+                                loaded ?
+                                    <CharacterView character={character}/> : <Spinner/>
+                    }
                 </div>
 
                 <div className="random-choose">

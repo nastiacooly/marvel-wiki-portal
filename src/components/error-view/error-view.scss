@@ -1,0 +1,10 @@
+.error-view {
+    align-self: center;
+    margin: 0 auto;
+
+    &__message {
+        color: #9F0013;
+        font-weight: 700;
+        font-size: 20px;
+    }
+}
