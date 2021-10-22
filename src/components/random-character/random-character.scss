@@ -20,11 +20,20 @@
     flex-direction: row;
     gap: 30px;
 
-    &__image img {
-        width: 180px;
-        height: 180px;
-        object-fit: cover;
+    &__image {
+        img {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        &_contain {
+            img {
+                object-fit: contain;
+            }
+        }
     }
+
 
     &__name {
         font-weight: 700;

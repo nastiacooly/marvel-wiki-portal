@@ -11,14 +11,17 @@ import './random-character.scss';
 class RandomCharacter extends Component {
     constructor(props) {
         super(props);
-        /* Getting random character on opening the app */
-        this.getRandomCharacter();
         this.state = {
             character: {},
             loaded: false,
             error: false,
             errorMessage: "",
         }
+    }
+
+    componentDidMount() {
+        /* Getting random character on opening the app */
+        this.getRandomCharacter();
     }
 
     onCharacterLoaded = (character) => {
@@ -112,9 +115,17 @@ class RandomCharacter extends Component {
 const CharacterView = ({character}) => {
     const {name, thumbnail, description, homepage, wiki} = character;
 
+
+    /* Change styles for a "not found" image */
+    const imageNotFound = "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg";
+    let imageClassNames = "random-character__image";
+    if (thumbnail === imageNotFound) {
+        imageClassNames += " random-character__image_contain";
+    }
+
     return (
         <Fragment>
-            <div className="random-character__image">
+            <div className={imageClassNames}>
                 <img src={thumbnail} alt="random character" />
             </div>
 
