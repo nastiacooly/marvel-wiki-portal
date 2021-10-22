@@ -17,7 +17,7 @@ const Spinner = () => {
                     strokeDasharray="50.26548245743669 50.26548245743669" 
                     fill="none" 
                     strokeLinecap="round">
-                    <animateTransform attributeName="transform" type="rotate" dur="1.25s" repeatCount="indefinite" keyTimes="0;1" values="0 50 50;360 50 50"></animateTransform>
+                    <animateTransform attributeName="transform" type="rotate" dur="2s" repeatCount="indefinite" keyTimes="0;1" values="0 50 50;360 50 50"></animateTransform>
                 </circle>
                 <circle 
                     cx="50" 
@@ -29,7 +29,7 @@ const Spinner = () => {
                     strokeDashoffset="36.12831551628262" 
                     fill="none" 
                     strokeLinecap="round">
-                    <animateTransform attributeName="transform" type="rotate" dur="1.25s" repeatCount="indefinite" keyTimes="0;1" values="0 50 50;-360 50 50"></animateTransform>
+                    <animateTransform attributeName="transform" type="rotate" dur="2s" repeatCount="indefinite" keyTimes="0;1" values="0 50 50;-360 50 50"></animateTransform>
                 </circle>
         </svg>
     );

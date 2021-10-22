@@ -1,6 +1,8 @@
 import {Component} from 'react';
+import {Fragment} from 'react';
 
 import MarvelAPIService from '../../services/marvel-api-service';
+import Spinner from '../spinner/spinner';
 
 import '../../button.scss';
 import './random-character.scss';
@@ -12,6 +14,7 @@ class RandomCharacter extends Component {
         this.getRandomCharacter();
         this.state = {
             character: {},
+            loaded: false,
         }
     }
 
@@ -20,7 +23,10 @@ class RandomCharacter extends Component {
          * Saves character data to state
          * of this component.
          */
-        this.setState({character});
+        this.setState({
+            character: character,
+            loaded: true
+        });
     }
 
     /**
@@ -34,38 +40,34 @@ class RandomCharacter extends Component {
          * Gets data (object) from Marvel API on random character
          * and saves it to the state of this component.
          */
+        
+        this.setState({
+            loaded: false
+        })
+
         const maxId = 1011400;
         const minId = 1011000;
         const randomId = Math.floor(minId + Math.random() * (maxId - minId));
 
         this.marvelService
             .getCharacter(randomId)
-            .then(this.onCharacterLoaded);
+            .then(this.onCharacterLoaded)
+            .catch(() => {
+                this.setState({
+                loaded: false
+                });
+            });
     }
     
     render() {
-        const {name, description, thumbnail, homepage, wiki} = this.state.character;
+        const {character} = this.state;
+        const {loaded} = this.state;
 
         return (
             <section className="random-section">
 
                 <div className="random-character">
-                    <div className="random-character__image">
-                        <img src={thumbnail} alt="random character" />
-                    </div>
-        
-                    <div className="random-character__details">
-                        <h3 className="random-character__name">
-                            {name}
-                        </h3>
-                        <p className="random-character__descr">
-                            {description}
-                        </p>
-                        <div className="random-character__links">
-                            <a href={homepage} className="app-button app-button_main">Homepage</a>
-                            <a href={wiki} className="app-button">Wiki</a>
-                        </div>
-                    </div>
+                    {loaded ? <CharacterView character={character}/> : <Spinner/>}
                 </div>
 
                 <div className="random-choose">
@@ -88,6 +90,31 @@ class RandomCharacter extends Component {
             
         );
     }
+}
+
+const CharacterView = ({character}) => {
+    const {name, thumbnail, description, homepage, wiki} = character;
+
+    return (
+        <Fragment>
+            <div className="random-character__image">
+                <img src={thumbnail} alt="random character" />
+            </div>
+
+            <div className="random-character__details">
+                <h3 className="random-character__name">
+                    {name}
+                </h3>
+                <p className="random-character__descr">
+                    {description}
+                </p>
+                <div className="random-character__links">
+                    <a href={homepage} className="app-button app-button_main">Homepage</a>
+                    <a href={wiki} className="app-button">Wiki</a>
+                </div>
+            </div>
+        </Fragment>
+    );
 }
 
 export default RandomCharacter;
