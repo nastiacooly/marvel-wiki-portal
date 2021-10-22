@@ -18,14 +18,22 @@ class CharacterCard extends Component {
     }
 
     render() {
+        /* Change styles for active card */
         let className = "character-card";
         if (this.state.active) {
             className += " character-card_active";
         }
 
+        /* Change styles for a "not found" image */
+        const imageNotFound = "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg";
+        let imageClassNames = "character-card__image";
+        if (this.props.image === imageNotFound) {
+            imageClassNames += " character-card__image_contain";
+        }
+
         return (
             <div className={className} onClick={this.onActivate}>
-                <div className="character-card__image">
+                <div className={imageClassNames}>
                     <img src={this.props.image} alt="Comics Character Portrait" />
                 </div>
     

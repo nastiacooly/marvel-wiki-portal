@@ -78,16 +78,20 @@ class RandomCharacter extends Component {
         const {character} = this.state;
         const {loaded, error, errorMessage} = this.state;
 
+        /* Determine content depending on error and loaded status */
+        let content = (
+            error ? 
+                <ErrorView message={errorMessage} flex="row" /> 
+                : loaded ? 
+                    <CharacterView character={character}/> 
+                    : <Spinner/>
+        );
+
         return (
             <section className="random-section">
 
                 <div className="random-character">
-                    {   
-                        error ? 
-                            <ErrorView message={errorMessage}/> : 
-                                loaded ?
-                                    <CharacterView character={character}/> : <Spinner/>
-                    }
+                    {content}
                 </div>
 
                 <div className="random-choose">

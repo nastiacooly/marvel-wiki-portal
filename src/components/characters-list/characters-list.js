@@ -1,35 +1,96 @@
-import CharacterCard from '../character-card/character-card';
+import {Component} from 'react';
 
-import Abyss from '../../static/img/Abyss.png';
-import Loki from '../../static/img/Loki.png';
+import MarvelAPIService from '../../services/marvel-api-service';
+
+import CharacterCard from '../character-card/character-card';
+import ErrorView from '../error-view/error-view';
+import Spinner from '../spinner/spinner';
 
 import './characters-list.scss';
 
-/* Simulation of data from API */
-const characters = [
-    {name: "Loki", image: Abyss},
-    {name: "Abyss", image: Loki},
-    {name: "Adam Warlock", image: Abyss},
-    {name: "Boom Boom", image: Loki},
-    {name: "Calypso", image: Abyss},
-    {name: "Colleen Wing", image: Loki},
-    {name: "Daimon Hellstrom", image: Abyss},
-    {name: "Damage Control", image: Loki},
-    {name: "Hulk", image: Abyss}
-];
+class CharactersList extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            characters: [],
+            loaded: false,
+            error: false,
+            errorMessage: '',
+        }
+    }
 
-const CharactersList = () => {
-    const characterCards = characters.map( (character, i) => {
-        return <CharacterCard key={i} name={character.name} image={character.image}/>;
-    });
+    componentDidMount() {
+        this.getCharacters();
+    }
 
-    return (
-        <div className="characters-list">
-            {characterCards}
+    /**
+     * Initializing property for the component
+     * to communicate with Marvel API
+     */
+    marvelService = new MarvelAPIService();
 
-            <button className="app-button app-button_main app-button_wide">Load More</button>
-        </div>
-    );
+    getCharacters = () => {
+        /**
+         * Gets data (array) from Marvel API on 9 characters
+         * and saves it to the state of this component.
+         */
+        this.marvelService
+        .getAllCharacters()
+        .then(this.onCharactersLoaded)
+        .catch(this.onError);
+    }
+
+    onCharactersLoaded = (characters) => {
+        /**
+         * Saves characters data to state
+         * of this component.
+         */
+        this.setState({
+            characters,
+            loaded: true,
+            error: false
+        });
+    }
+
+    onError = () => {
+        /**
+         * Keeps track of error in the state.
+         */
+        this.setState({
+            loaded: true,
+            error: true,
+            errorMessage: "Something went wrong. Please try updating the page.",
+        });
+    }
+
+    render() {
+        const {characters, error, loaded, errorMessage} = this.state;
+
+        /* Mapping characters to CharacterCard components */
+        const characterCards = characters.map( ({id, name, thumbnail}) => {
+            return <CharacterCard key={id} name={name} image={thumbnail}/>;
+        });
+
+        /* Determine content depending on error and loaded status */
+        let content = (
+            error ? 
+                <ErrorView message={errorMessage} flex="column" /> 
+                : loaded ? 
+                    characterCards 
+                    : <Spinner/>
+        );
+
+        return (
+            <div className="characters-section">
+                <div className="characters-section__list">
+                    {content}
+                </div>
+
+                <button className="app-button app-button_main app-button_wide">Load More</button>
+            </div>
+            
+        );
+    }
 }
 
 export default CharactersList;

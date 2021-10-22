@@ -1,10 +1,14 @@
-.characters-list {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+.characters-section {
     width: 55%;
-    gap: 25px;
-    row-gap: 30px;
-    align-items: center;
-    justify-content: center;
+    
+    &__list {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 100%;
+        gap: 25px;
+        row-gap: 30px;
+        align-items: center;
+        justify-content: center;
+    }
 }

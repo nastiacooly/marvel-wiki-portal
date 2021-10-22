@@ -25,7 +25,7 @@ class MarvelAPIService {
          * Returns array with all characters with data 
          * transformed for each character.
          */
-        const response =  await this.getResource(this._apiUrlsurls.allCharacters);
+        const response = await this.getResource(this._apiUrls.allCharacters);
         return response.data.results.map(this._transformCharacterData);
     }
 
@@ -67,6 +67,7 @@ class MarvelAPIService {
         }
 
         return {
+            id: character.id,
             name: character.name,
             description: description,
             thumbnail: character.thumbnail.path + "." + character.thumbnail.extension,
