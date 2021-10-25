@@ -32,15 +32,21 @@ class CharacterCard extends Component {
         }
 
         return (
-            <div className={className} onClick={this.onActivate}>
-                <div className={imageClassNames}>
-                    <img src={this.props.image} alt="Comics Character Portrait" />
-                </div>
-    
-                <div className="character-card__details">
-                    <h3 className="character-card__name">{this.props.name}</h3>
-                </div>
-            </div>
+            <li 
+                className={className} 
+                onClick={() => {
+                    this.props.onCharacterCardSelected(this.props.id);
+                    this.onActivate();
+                }}
+            >
+                    <div className={imageClassNames}>
+                        <img src={this.props.image} alt="Comics Character Portrait" />
+                    </div>
+        
+                    <div className="character-card__details">
+                        <h3 className="character-card__name">{this.props.name}</h3>
+                    </div>
+            </li>
         );
     }
 }

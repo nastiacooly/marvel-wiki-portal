@@ -63,17 +63,36 @@ class CharactersList extends Component {
         });
     }
 
+    renderCharacterCards = (characters) => {
+        /**
+         * Returns character cards elements
+         * with data about characters.
+         */
+        if (!characters) {
+            return null;
+        }
+
+        const {onCharacterCardSelected} = this.props;
+        /* Mapping characters to CharacterCard components */
+        return characters.map( ({id, name, thumbnail}) => {
+            return <CharacterCard 
+                        key={id} 
+                        id={id}
+                        name={name} 
+                        image={thumbnail}
+                        onCharacterCardSelected={onCharacterCardSelected}
+                    />;
+        });
+    }
+
     getContent = () => {
         /**
          * Determines content for rendering
          * depending on error and loaded status.
          */
         const {characters, error, loaded, errorMessage} = this.state;
-
-        /* Mapping characters to CharacterCard components */
-        const characterCards = characters.map( ({id, name, thumbnail}) => {
-            return <CharacterCard key={id} name={name} image={thumbnail}/>;
-        });
+        
+        const characterCards = this.renderCharacterCards(characters);
 
         /* Return content */
         return (
@@ -86,11 +105,13 @@ class CharactersList extends Component {
     }
 
     render() {
+        const content = this.getContent();
+
         return (
             <div className="characters-section">
-                <div className="characters-section__list">
-                    {this.getContent()}
-                </div>
+                <ul className="characters-section__list">
+                    {content}
+                </ul>
 
                 <button className="app-button app-button_main app-button_wide">Load More</button>
             </div>

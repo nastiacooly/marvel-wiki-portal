@@ -101,11 +101,13 @@ class RandomCharacter extends Component {
     
     render() {
 
+        const content = this.getContent();
+
         return (
             <section className="random-section">
 
                 <div className="random-character">
-                    {this.getContent()}
+                    {content}
                 </div>
 
                 <div className="random-choose">

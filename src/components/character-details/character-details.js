@@ -1,59 +1,180 @@
-import Loki from '../../static/img/Loki.png';
+import {Component} from 'react';
+import {Fragment} from 'react';
+
+import MarvelAPIService from '../../services/marvel-api-service';
+import ErrorView from '../error-view/error-view';
+import Spinner from '../spinner/spinner';
+import Skeleton from '../skeleton/skeleton';
 
 import './character-details.scss';
 
-const comics = [
-    "All-Winners Squad: Band of Heroes (2011) #3",
-    "Alpha Flight (1983) #50",
-    "Amazing Spider-Man (1999) #503",
-    "Amazing Spider-Man (1999) #504",
-    "AMAZING SPIDER-MAN VOL. 7: BOOK OF EZEKIEL TPB (Trade Paperback)"
-];
+class CharacterDetails extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            character: null,
+            loaded: true,
+            error: false,
+            errorMessage: "",
+        }
+    }
 
-const CharacterComics = (props) => {
+    componentDidMount() {
+        /* Getting selected character details */
+        this.getCharacterDetails(this.props.characterId);
+    }
+
+    componentDidUpdate(prevProps) {
+        /* Getting newly selected character details */
+        if (this.props.characterId !== prevProps.characterId) {
+            this.getCharacterDetails(this.props.characterId);
+        }
+    }
+
+    /**
+     * Initializing property for the component
+     * to communicate with Marvel API
+     */
+    marvelService = new MarvelAPIService();
+
+    onCharacterLoading = () => {
+        /**
+         * Keeps corresponding states
+         * for loading process.
+         */
+        this.setState({
+            loaded: false,
+            error: false,
+            character: null
+        })
+    }
+
+    onCharacterLoaded = (character) => {
+        /**
+         * Saves character data to state
+         * of this component.
+         */
+        this.setState({
+            character: character,
+            loaded: true,
+            error: false
+        });
+    }
+
+    onError = () => {
+        /**
+         * Keeps track of error in the state.
+         */
+        this.setState({
+            loaded: true,
+            error: true,
+            errorMessage: "Something went wrong. Please try again.",
+        });
+    }
+
+    getCharacterDetails = (id) => {
+        /**
+         * Gets data (object) from Marvel API on selected character
+         * and saves it to the state of this component.
+         */
+        if (!id) {
+            return;
+        }
+
+        this.onCharacterLoading();
+
+        this.marvelService
+            .getCharacter(id)
+            .then(this.onCharacterLoaded)
+            .catch(this.onError);
+    }
+
+    getContent = () => {
+        /**
+         * Determines content for rendering
+         * depending on error and loaded status.
+         */
+        const {character, loaded, error, errorMessage} = this.state;
+
+        /* Return content */
+        return (
+            error ? 
+                <ErrorView message={errorMessage} flex="row" /> 
+                : loaded ? 
+                    (character ? <CharacterDetailsView character={character}/> : <Skeleton/>)
+                        : <Spinner/>
+        );
+    }
+
+    render() {
+        const {character} = this.state;
+        const content = this.getContent();
+
+        const characterComics = character?.comics?.map((item, i) => {
+            return <CharacterComicsView key={i} name={item.name}/>
+        });
+
+        const comicsContent = characterComics && characterComics.length > 0 ? 
+                                    (<><h5>Comics:</h5> {characterComics}</>) 
+                                    : null;
+    
+        return (
+            <div className="character-info">
+                {content}
+                <ul className="character-info__comics">
+                    {comicsContent}
+                </ul>
+            </div>
+        );
+    }
+
+}
+
+
+const CharacterDetailsView = ({character}) => {
+    /**
+     * Returns element with character details.
+     */
+    const {name, thumbnail, description, homepage, wiki} = character;
+
+    /* Change styles for a "not found" image */
+    const imageNotFound = "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg";
+    let imageClassNames = "character-info__image";
+    if (thumbnail === imageNotFound) {
+        imageClassNames += " character-info__image_contain";
+    }
+
     return (
-        <div className="character-info__single-comics">
-            <p>{props.name}</p>
-        </div>
+        <Fragment>
+            <div className="character-info__header">
+                    <div className={imageClassNames}>
+                        <img src={thumbnail} alt="Character Portrait"/>
+                    </div>
+    
+                    <div className="character-info__main">
+                        <h3 className="character-info__name">{name}</h3>
+    
+                        <div className="character-info__links">
+                            <a href={homepage} className="app-button app-button_main app-button_mb10">Homepage</a>
+                            <a href={wiki} className="app-button">Wiki</a>
+                        </div>
+                    </div>
+            </div>
+    
+            <article className="character-info__bio">
+                {description}
+            </article>
+        </Fragment>
     );
 }
 
-const CharacterDetails = (props) => {
 
-    const characterComics = comics.map((item, i) => {
-        return <CharacterComics key={i} name={item}/>
-    });
-
+const CharacterComicsView = (props) => {
     return (
-        <div className="character-info">
-            <div className="character-info__header">
-                <div className="character-info__image">
-                    <img src={Loki} alt="Character Portrait"/>
-                </div>
-
-                <div className="character-info__main">
-                    <h3 className="character-info__name">Loki</h3>
-
-                    <div className="character-info__links">
-                        <a href="marvel.com" className="app-button app-button_main app-button_mb10">Homepage</a>
-                        <a href="marvel.com" className="app-button">Wiki</a>
-                    </div>
-                </div>
-            </div>
-
-            <article className="character-info__bio">
-                In Norse mythology, Loki is a god or jötunn (or both). Loki is the son of Fárbauti and Laufey, and the brother of Helblindi and Býleistr. By the jötunn Angrboða, Loki is the father of Hel, the wolf Fenrir, and the world serpent Jörmungandr. By Sigyn, Loki is the father of Nari and/or Narfi and with the stallion Svaðilfari as the father, Loki gave birth—in the form of a mare—to the eight-legged horse Sleipnir. In addition, Loki is referred to as the father of Váli in the Prose Edda.
-            </article>
-
-            <div className="character-info__comics">
-                <h5>Comics:</h5>
-                {characterComics}
-            </div>
-
-        </div>
-
+        <li className="character-info__single-comics">
+            {props.name}
+        </li>
     );
-
 }
 
 export default CharacterDetails;

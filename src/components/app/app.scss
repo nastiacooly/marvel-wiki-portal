@@ -8,6 +8,7 @@
     position: absolute;
     bottom: 0;
     right: 0;
+    z-index: -10;
     
     &__image {
         max-width: 467px;
