@@ -24,6 +24,17 @@ class RandomCharacter extends Component {
         this.getRandomCharacter();
     }
 
+    onCharacterLoading = () => {
+        /**
+         * Keeps corresponding states
+         * for loading process.
+         */
+        this.setState({
+            loaded: false,
+            error: false
+        })
+    }
+
     onCharacterLoaded = (character) => {
         /**
          * Saves character data to state
@@ -59,10 +70,7 @@ class RandomCharacter extends Component {
          * and saves it to the state of this component.
          */
         
-        this.setState({
-            loaded: false,
-            error: false
-        })
+        this.onCharacterLoading();
 
         const maxId = 1011400;
         const minId = 1011000;
