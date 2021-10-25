@@ -81,25 +81,31 @@ class RandomCharacter extends Component {
             .then(this.onCharacterLoaded)
             .catch(this.onError);
     }
-    
-    render() {
-        const {character} = this.state;
-        const {loaded, error, errorMessage} = this.state;
 
-        /* Determine content depending on error and loaded status */
-        let content = (
+    getContent = () => {
+        /**
+         * Determines content for rendering
+         * depending on error and loaded status.
+         */
+        const {character, loaded, error, errorMessage} = this.state;
+
+        /* Return content */
+        return (
             error ? 
                 <ErrorView message={errorMessage} flex="row" /> 
                 : loaded ? 
                     <CharacterView character={character}/> 
                     : <Spinner/>
         );
+    }
+    
+    render() {
 
         return (
             <section className="random-section">
 
                 <div className="random-character">
-                    {content}
+                    {this.getContent()}
                 </div>
 
                 <div className="random-choose">

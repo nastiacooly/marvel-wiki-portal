@@ -63,7 +63,11 @@ class CharactersList extends Component {
         });
     }
 
-    render() {
+    getContent = () => {
+        /**
+         * Determines content for rendering
+         * depending on error and loaded status.
+         */
         const {characters, error, loaded, errorMessage} = this.state;
 
         /* Mapping characters to CharacterCard components */
@@ -71,19 +75,21 @@ class CharactersList extends Component {
             return <CharacterCard key={id} name={name} image={thumbnail}/>;
         });
 
-        /* Determine content depending on error and loaded status */
-        let content = (
+        /* Return content */
+        return (
             error ? 
                 <ErrorView message={errorMessage} flex="column" /> 
                 : loaded ? 
                     characterCards 
                     : <Spinner/>
         );
+    }
 
+    render() {
         return (
             <div className="characters-section">
                 <div className="characters-section__list">
-                    {content}
+                    {this.getContent()}
                 </div>
 
                 <button className="app-button app-button_main app-button_wide">Load More</button>
