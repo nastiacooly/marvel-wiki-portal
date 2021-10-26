@@ -14,13 +14,16 @@ class CharactersList extends Component {
         this.state = {
             characters: [],
             loaded: false,
+            newItemsLoading: false,
+            charactersEnded: false,
             error: false,
             errorMessage: '',
+            offset: this.marvelService._baseCharactersOffset,
         }
     }
 
     componentDidMount() {
-        this.getCharacters();
+        this.onLoadCharacters();
     }
 
     /**
@@ -29,27 +32,56 @@ class CharactersList extends Component {
      */
     marvelService = new MarvelAPIService();
 
-    getCharacters = () => {
+    onLoadCharacters = (offset) => {
         /**
-         * Gets data (array) from Marvel API on 9 characters
-         * and saves it to the state of this component.
+         * Gets data (array) from Marvel API on additional
+         * 9 characters and saves it to the state 
+         * of this component.
          */
+        this.onCharactersLoading();
+
         this.marvelService
-        .getAllCharacters()
-        .then(this.onCharactersLoaded)
-        .catch(this.onError);
+            .getAllCharacters(offset)
+            .then(this.onCharactersLoaded)
+            .catch(this.onError);
     }
 
     onCharactersLoaded = (characters) => {
         /**
-         * Saves characters data to state
-         * of this component.
+         * Saves newly uploaded characters data 
+         * to the state of this component.
+         * And updates offset for following uploads.
+         */
+        this.setState((state) => {     
+            const charactersPerLoad = this.marvelService._baseCharactersLimit;
+
+            /* No "load more" button if characters ended */
+            let ended = false;
+            if (characters.length < charactersPerLoad) {
+                ended = true;
+            }
+            
+            return {
+                characters: [...state.characters, ...characters],
+                loaded: true,
+                newItemsLoading: false,
+                charactersEnded: ended,
+                error: false,
+                offset: state.offset + charactersPerLoad,
+            }
+        });
+    }
+
+    onCharactersLoading = () => {
+        /**
+         * Keeps corresponding states
+         * for loading process.
          */
         this.setState({
-            characters,
-            loaded: true,
-            error: false
-        });
+            loaded: false,
+            error: false,
+            newItemsLoading: true
+        })
     }
 
     onError = () => {
@@ -59,6 +91,7 @@ class CharactersList extends Component {
         this.setState({
             loaded: true,
             error: true,
+            newItemsLoading: false,
             errorMessage: "Something went wrong. Please try updating the page.",
         });
     }
@@ -100,11 +133,12 @@ class CharactersList extends Component {
                 <ErrorView message={errorMessage} flex="column" /> 
                 : loaded ? 
                     characterCards 
-                    : <Spinner/>
+                    : (<> {characterCards} <Spinner/> </>)
         );
     }
 
     render() {
+        const {offset, newItemsLoading, charactersEnded} = this.state;
         const content = this.getContent();
 
         return (
@@ -113,7 +147,14 @@ class CharactersList extends Component {
                     {content}
                 </ul>
 
-                <button className="app-button app-button_main app-button_wide">Load More</button>
+                <button 
+                    className="app-button app-button_main app-button_wide"
+                    disabled={newItemsLoading}
+                    style={{'display': charactersEnded ? 'none' : 'block'}}
+                    onClick={() => this.onLoadCharacters(offset)}
+                    >
+                        Load More
+                </button>
             </div>
             
         );

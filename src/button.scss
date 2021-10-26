@@ -59,6 +59,10 @@
     &_mb10 {
         margin-bottom: 10px;
     }
+
+    &:disabled {
+        filter: grayscale(.5);
+    }
 }
 
 a.app-button {

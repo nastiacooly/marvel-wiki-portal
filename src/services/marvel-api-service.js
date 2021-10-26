@@ -3,8 +3,10 @@ import publicApiKey from './api-key';
 class MarvelAPIService {
     _apiBase = "https://gateway.marvel.com:443/v1/public";
     _apiKeyBase = "apikey=";
+    _baseCharactersOffset = 210; /* number of characters to pass from the begginnng of the list */
+    _baseCharactersLimit = 9; /* characters per load */
     _apiUrls = {
-        allCharacters: `${this._apiBase}/characters?limit=9&offset=210&${this._apiKeyBase}${publicApiKey}`,
+        allCharacters: `${this._apiBase}/characters?`,
         singleCharacter: `${this._apiBase}/characters/`,
     }
 
@@ -18,14 +20,18 @@ class MarvelAPIService {
         return await res.json();
     }
 
-    getAllCharacters = async () => {
+    getAllCharacters = async (offset = this._baseCharactersOffset) => {
         /**
          * Fetches data from Marvel API
-         * on all characters.
+         * on all characters (limited in this._baseCharactersLimit).
+         * Takes optional argument for characters offset (number).
          * Returns array with all characters with data 
          * transformed for each character.
          */
-        const response = await this.getResource(this._apiUrls.allCharacters);
+        const response = await this.getResource(
+            this._apiUrls.allCharacters 
+            + `limit=${this._baseCharactersLimit}&offset=${offset}&${this._apiKeyBase}${publicApiKey}`
+        );
         return response.data.results.map(this._transformCharacterData);
     }
 
