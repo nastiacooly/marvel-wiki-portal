@@ -32,8 +32,8 @@ All the information about characters and comics received from [Marvel API](https
 
 4. Create 'api-key.js' file in src/services folder with the following code:
     ```
-    const PublicApiKey = "Your Marvel API public key here";
-    export default PublicApiKey;
+    const publicApiKey = "Your Marvel API public key here";
+    export default publicApiKey;
     ```
 
 5. Run the app with `npm start` command.

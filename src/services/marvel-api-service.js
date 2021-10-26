@@ -1,10 +1,10 @@
-import PublicApiKey from './api-key';
+import publicApiKey from './api-key';
 
 class MarvelAPIService {
     _apiBase = "https://gateway.marvel.com:443/v1/public";
     _apiKeyBase = "apikey=";
     _apiUrls = {
-        allCharacters: `${this._apiBase}/characters?limit=9&offset=210&${this._apiKeyBase}${PublicApiKey}`,
+        allCharacters: `${this._apiBase}/characters?limit=9&offset=210&${this._apiKeyBase}${publicApiKey}`,
         singleCharacter: `${this._apiBase}/characters/`,
     }
 
@@ -44,7 +44,7 @@ class MarvelAPIService {
             + id 
             + "?" 
             + this._apiKeyBase 
-            + PublicApiKey
+            + publicApiKey
             );
         const characterMainData = response.data.results[0];
         return this._transformCharacterData(characterMainData);
