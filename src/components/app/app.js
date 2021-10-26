@@ -5,6 +5,8 @@ import RandomCharacter from '../random-character/random-character';
 import CharactersList from '../characters-list/characters-list';
 import CharacterDetails from '../character-details/character-details';
 
+import ErrorBoundary from '../error-boundary/error-boundary';
+
 import vision from '../../static/img/bottom_bg.png';
 
 import './app.scss';
@@ -31,11 +33,18 @@ class App extends Component {
         <AppHeader />
   
         <main>
-          <RandomCharacter />
+          <ErrorBoundary>
+            <RandomCharacter />
+          </ErrorBoundary>
   
           <div className="characters-container">
-            <CharactersList onCharacterCardSelected={this.onCharacterCardSelected}/>
-            <CharacterDetails characterId={activeCharacterCard}/>
+            <ErrorBoundary>
+              <CharactersList onCharacterCardSelected={this.onCharacterCardSelected}/>
+            </ErrorBoundary>
+
+            <ErrorBoundary>
+              <CharacterDetails characterId={activeCharacterCard}/>
+            </ErrorBoundary>
           </div>
 
         </main>
