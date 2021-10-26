@@ -1,5 +1,6 @@
 import {Component} from 'react';
 import {Fragment} from 'react';
+import PropTypes from 'prop-types';
 
 import MarvelAPIService from '../../services/marvel-api-service';
 import ErrorView from '../error-view/error-view';
@@ -175,6 +176,10 @@ const CharacterComicsView = (props) => {
             {props.name}
         </li>
     );
+}
+
+CharacterDetails.propTypes = {
+    characterId: PropTypes.number
 }
 
 export default CharacterDetails;

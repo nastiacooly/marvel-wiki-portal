@@ -18,6 +18,8 @@ class CharacterCard extends Component {
     }
 
     render() {
+        const {id, image, name, onCharacterCardSelected} = this.props;
+
         /* Change styles for active card */
         let className = "character-card";
         if (this.state.active) {
@@ -35,16 +37,16 @@ class CharacterCard extends Component {
             <li 
                 className={className} 
                 onClick={() => {
-                    this.props.onCharacterCardSelected(this.props.id);
+                    onCharacterCardSelected(id);
                     this.onActivate();
                 }}
             >
                     <div className={imageClassNames}>
-                        <img src={this.props.image} alt="Comics Character Portrait" />
+                        <img src={image} alt="Comics Character Portrait" />
                     </div>
         
                     <div className="character-card__details">
-                        <h3 className="character-card__name">{this.props.name}</h3>
+                        <h3 className="character-card__name">{name}</h3>
                     </div>
             </li>
         );

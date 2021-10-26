@@ -1,4 +1,5 @@
 import {Component} from 'react';
+import PropTypes from 'prop-types';
 
 import MarvelAPIService from '../../services/marvel-api-service';
 
@@ -159,6 +160,10 @@ class CharactersList extends Component {
             
         );
     }
+}
+
+CharactersList.propTypes = {
+    onCharacterCardSelected: PropTypes.func.isRequired
 }
 
 export default CharactersList;

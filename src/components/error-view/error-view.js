@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 import './error-view.scss';
 
 const ErrorView = ({message, flex}) => {
@@ -52,6 +54,15 @@ const ErrorIcon = () => {
                 </g></g>
         </svg>
     );
+}
+
+ErrorView.propTypes = {
+    message: PropTypes.string.isRequired,
+    flex: PropTypes.oneOf(['column', 'row'])
+}
+
+ErrorView.defaultProps = {
+    message: "Something went wrong"
 }
 
 export default ErrorView;
