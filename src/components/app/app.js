@@ -39,7 +39,10 @@ class App extends Component {
   
           <div className="characters-container">
             <ErrorBoundary>
-              <CharactersList onCharacterCardSelected={this.onCharacterCardSelected}/>
+              <CharactersList 
+                activeCharacterCard={activeCharacterCard} 
+                onCharacterCardSelected={this.onCharacterCardSelected}
+              />
             </ErrorBoundary>
 
             <ErrorBoundary>

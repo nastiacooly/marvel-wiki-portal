@@ -106,15 +106,17 @@ class CharactersList extends Component {
             return null;
         }
 
-        const {onCharacterCardSelected} = this.props;
+        const {onCharacterCardSelected, activeCharacterCard} = this.props;
         /* Mapping characters to CharacterCard components */
         return characters.map( ({id, name, thumbnail}) => {
+            let active = id === activeCharacterCard;
             return <CharacterCard 
                         key={id} 
                         id={id}
                         name={name} 
                         image={thumbnail}
                         onCharacterCardSelected={onCharacterCardSelected}
+                        active={active}
                     />;
         });
     }
@@ -163,6 +165,7 @@ class CharactersList extends Component {
 }
 
 CharactersList.propTypes = {
+    activeCharacterCard: PropTypes.number,
     onCharacterCardSelected: PropTypes.func.isRequired
 }
 

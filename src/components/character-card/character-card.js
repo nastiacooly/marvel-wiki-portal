@@ -1,30 +1,12 @@
 import {Component} from 'react';
+import PropTypes from 'prop-types';
 
 import './character-card.scss';
 
 class CharacterCard extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            active: false,
-        }
-    }
-
-    onActivate = () => {
-        this.setState(({active}) => ({
-            active: !active
-        }));
-    }
-
     render() {
-        const {id, image, name, onCharacterCardSelected} = this.props;
-
-        /* Change styles for active card */
-        let className = "character-card";
-        if (this.state.active) {
-            className += " character-card_active";
-        }
+        const {id, image, name, onCharacterCardSelected, active} = this.props;
 
         /* Change styles for a "not found" image */
         const imageNotFound = "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg";
@@ -33,12 +15,18 @@ class CharacterCard extends Component {
             imageClassNames += " character-card__image_contain";
         }
 
+        /* Change styles for selected card */
+        let classNames = active ? 'character-card character-card_active' : 'character-card';
+
         return (
             <li 
-                className={className} 
-                onClick={() => {
-                    onCharacterCardSelected(id);
-                    this.onActivate();
+                className={classNames}
+                tabIndex="0"
+                onClick={() => onCharacterCardSelected(id)}
+                onKeyPress={(e) => {
+                    if (e.key === ' ' || e.key === "Enter") {
+                        onCharacterCardSelected(id);
+                    }
                 }}
             >
                     <div className={imageClassNames}>
@@ -51,6 +39,11 @@ class CharacterCard extends Component {
             </li>
         );
     }
+}
+
+CharacterCard.propTypes = {
+    active: PropTypes.bool,
+    onCharacterCardSelected: PropTypes.func.isRequired
 }
 
 export default CharacterCard;
