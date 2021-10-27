@@ -1,7 +1,7 @@
 {
-  "name": "marvel_wiki",
+  "name": "marvel-wiki-portal",
   "version": "0.1.0",
-  "homepage": "https://nastiacooly.github.io/marvel-wiki-portal",
+  "homepage": "https://nastiacooly.github.io/marvel-wiki-portal/",
   "private": false,
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",

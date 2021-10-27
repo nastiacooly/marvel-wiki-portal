@@ -2,6 +2,8 @@
 
 In process.
 
+You can already [try](https://nastiacooly.github.io/marvel-wiki-portal/) some features of the app deployed on GitHub Pages.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## What is it?
@@ -22,7 +24,7 @@ Frontend: HTML5, CSS3 (Scss), React.
 
 All the information about characters and comics received from [Marvel API](https://developer.marvel.com/).
 
-## How to run the app?
+## How to run the app locally with your own Marvel API key?
 
 1. Download files from repo.
 
