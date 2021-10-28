@@ -1,4 +1,4 @@
-import {Component} from 'react';
+import {useState} from 'react';
 
 import AppHeader from '../app-header/app-header';
 import RandomCharacter from '../random-character/random-character';
@@ -11,57 +11,46 @@ import vision from '../../static/img/bottom_bg.png';
 
 import './app.scss';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeCharacterCard: null,
-    }
+const App = () => {
+  const [activeCharacterCard, setActiveCharacterCard] = useState(null);
+
+  const onCharacterCardSelected = (id) => {
+    setActiveCharacterCard(id);
   }
 
-  onCharacterCardSelected = (id) => {
-    this.setState({
-      activeCharacterCard: id,
-    });
-  }
+  return (
+    <div className="app-container">
+      <AppHeader />
 
-  render() {
-    const {activeCharacterCard} = this.state;
+      <main>
+        <ErrorBoundary>
+          <RandomCharacter />
+        </ErrorBoundary>
 
-    return (
-      <div className="app-container">
-        <AppHeader />
-  
-        <main>
+        <div className="characters-container">
           <ErrorBoundary>
-            <RandomCharacter />
+            <CharactersList 
+              activeCharacterCard={activeCharacterCard} 
+              onCharacterCardSelected={onCharacterCardSelected}
+            />
           </ErrorBoundary>
-  
-          <div className="characters-container">
-            <ErrorBoundary>
-              <CharactersList 
-                activeCharacterCard={activeCharacterCard} 
-                onCharacterCardSelected={this.onCharacterCardSelected}
-              />
-            </ErrorBoundary>
 
-            <ErrorBoundary>
-              <CharacterDetails characterId={activeCharacterCard}/>
-            </ErrorBoundary>
-          </div>
+          <ErrorBoundary>
+            <CharacterDetails characterId={activeCharacterCard}/>
+          </ErrorBoundary>
+        </div>
 
-        </main>
-  
-        <footer className="app-footer">
-          <img 
-            src={vision} 
-            alt="Vision Character in Attacking Pose" 
-            className="app-footer__image"
-          />
-        </footer>
-      </div>
-    );
-  }
+      </main>
+
+      <footer className="app-footer">
+        <img 
+          src={vision} 
+          alt="Vision Character in Attacking Pose" 
+          className="app-footer__image"
+        />
+      </footer>
+    </div>
+  );
 }
 
 export default App;
