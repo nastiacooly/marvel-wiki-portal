@@ -1,5 +1,4 @@
-import {Component} from 'react';
-import {Fragment} from 'react';
+import {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 
 import MarvelAPIService from '../../services/marvel-api-service';
@@ -9,95 +8,49 @@ import Skeleton from '../skeleton/skeleton';
 
 import './character-details.scss';
 
-class CharacterDetails extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            character: null,
-            loaded: true,
-            error: false,
-            errorMessage: "",
-        }
-    }
+const CharacterDetails = (props) => {
+    const {characterId} = props;
+    /* Component states */
+    const [character, setCharacter] = useState(null);
+    const [loaded, setLoaded] = useState(true);
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
-    componentDidMount() {
-        /* Getting selected character details */
-        this.getCharacterDetails(this.props.characterId);
-    }
-
-    componentDidUpdate(prevProps) {
-        /* Getting newly selected character details */
-        if (this.props.characterId !== prevProps.characterId) {
-            this.getCharacterDetails(this.props.characterId);
-        }
-    }
-
-    /**
-     * Initializing property for the component
-     * to communicate with Marvel API
-     */
-    marvelService = new MarvelAPIService();
-
-    onCharacterLoading = () => {
+    const onCharacterLoading = () => {
         /**
          * Keeps corresponding states
          * for loading process.
          */
-        this.setState({
-            loaded: false,
-            error: false,
-            character: null
-        })
+        setLoaded(false);
+        setError(false);
+        setCharacter(null);
     }
 
-    onCharacterLoaded = (character) => {
+    const onCharacterLoaded = (character) => {
         /**
          * Saves character data to state
          * of this component.
          */
-        this.setState({
-            character: character,
-            loaded: true,
-            error: false
-        });
+        setCharacter(character);
+        setLoaded(true);
+        setError(false);
     }
 
-    onError = () => {
+    const onError = () => {
         /**
          * Keeps track of error in the state.
          */
-        this.setState({
-            loaded: true,
-            error: true,
-            errorMessage: "Something went wrong. Please try again.",
-        });
+        const errorMessage = "Something went wrong. Please try again.";
+        setLoaded(true);
+        setError(true);
+        setErrorMessage(errorMessage);
     }
 
-    getCharacterDetails = (id) => {
+    const getContent = () => {
         /**
-         * Gets data (object) from Marvel API on selected character
-         * and saves it to the state of this component.
-         */
-        if (!id) {
-            return;
-        }
-
-        this.onCharacterLoading();
-
-        this.marvelService
-            .getCharacter(id)
-            .then(this.onCharacterLoaded)
-            .catch(this.onError);
-    }
-
-    getContent = () => {
-        /**
-         * Determines content for rendering
+         * Returns different content for rendering
          * depending on error and loaded status.
          */
-        const {character, loaded, error, errorMessage} = this.state;
-
-        /* Return content */
         return (
             error ? 
                 <ErrorView message={errorMessage} flex="row" /> 
@@ -107,27 +60,56 @@ class CharacterDetails extends Component {
         );
     }
 
-    render() {
-        const {character} = this.state;
-        const content = this.getContent();
+    useEffect(() => {
+        /**
+         * Updates character details
+         * when user selects new character
+         * (with different id).
+         */
 
-        const characterComics = character?.comics?.map((item, i) => {
-            return <CharacterComicsView key={i} name={item.name}/>
-        });
+        /* Initializing an instance to communicate with Marvel API */
+        const marvelService = new MarvelAPIService();
 
-        const comicsContent = characterComics && characterComics.length > 0 ? 
-                                    (<><h5>Comics:</h5> {characterComics}</>) 
-                                    : null;
+        const getCharacterDetails = (id) => {
+            /**
+             * Gets data (object) from Marvel API on selected character
+             * and saves it to the state of this component.
+             */
+            if (!id) {
+                return;
+            }
     
-        return (
-            <div className="character-info">
-                {content}
-                <ul className="character-info__comics">
-                    {comicsContent}
-                </ul>
-            </div>
-        );
-    }
+            onCharacterLoading();
+    
+            marvelService
+                .getCharacter(id)
+                .then(onCharacterLoaded)
+                .catch(onError);
+        }
+
+        getCharacterDetails(characterId);
+    }, [characterId]);
+
+
+    /* Content definitions */
+    const content = getContent();
+
+    const characterComics = character?.comics?.map((item, i) => {
+        return <CharacterComicsView key={i} name={item.name}/>
+    });
+
+    const comicsContent = characterComics && characterComics.length > 0 ? 
+                            (<><h5>Comics:</h5> {characterComics}</>) 
+                            : null;
+
+    return (
+        <div className="character-info">
+            {content}
+            <ul className="character-info__comics">
+                {comicsContent}
+            </ul>
+        </div>
+    );
 
 }
 
@@ -146,7 +128,7 @@ const CharacterDetailsView = ({character}) => {
     }
 
     return (
-        <Fragment>
+        <>
             <div className="character-info__header">
                     <div className={imageClassNames}>
                         <img src={thumbnail} alt="Character Portrait"/>
@@ -165,7 +147,7 @@ const CharacterDetailsView = ({character}) => {
             <article className="character-info__bio">
                 {description}
             </article>
-        </Fragment>
+        </>
     );
 }
 
