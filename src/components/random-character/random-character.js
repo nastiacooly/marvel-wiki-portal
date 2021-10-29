@@ -1,5 +1,4 @@
-import {Component} from 'react';
-import {Fragment} from 'react';
+import {useState, useEffect} from 'react';
 
 import MarvelAPIService from '../../services/marvel-api-service';
 import Spinner from '../spinner/spinner';
@@ -8,88 +7,76 @@ import ErrorView from '../error-view/error-view';
 import '../../button.scss';
 import './random-character.scss';
 
-class RandomCharacter extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            character: {},
-            loaded: false,
-            error: false,
-            errorMessage: "",
-        }
-    }
+const RandomCharacter = () => {
+    /* Initializing instance to communicate with Marvel API */
+    const marvelService = new MarvelAPIService();
 
-    componentDidMount() {
+    /* Component states */
+    const [character, setCharacter] = useState({});
+    const [loaded, setLoaded] = useState(false);
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
+    /* Component logic */
+
+    useEffect(() => {
         /* Getting random character on opening the app */
-        this.getRandomCharacter();
-    }
+        getRandomCharacter();
+    }, []);
 
-    onCharacterLoading = () => {
+    const onCharacterLoading = () => {
         /**
          * Keeps corresponding states
          * for loading process.
          */
-        this.setState({
-            loaded: false,
-            error: false
-        })
+        setLoaded(false);
+        setError(false);
+        
     }
 
-    onCharacterLoaded = (character) => {
+    const onCharacterLoaded = (character) => {
         /**
          * Saves character data to state
          * of this component.
          */
-        this.setState({
-            character: character,
-            loaded: true,
-            error: false
-        });
+        setCharacter(character);
+        setLoaded(true);
+        setError(false);
     }
 
-    onError = () => {
+    const onError = () => {
         /**
          * Keeps track of error in the state.
          */
-        this.setState({
-            loaded: true,
-            error: true,
-            errorMessage: "Something went wrong. Please try again.",
-        });
+        const message = "Something went wrong. Please try again.";
+        setLoaded(true);
+        setError(true);
+        setErrorMessage(message);
     }
 
-    /**
-     * Initializing property for the component
-     * to communicate with Marvel API
-     */
-    marvelService = new MarvelAPIService();
-
-    getRandomCharacter = () => {
+    const getRandomCharacter = () => {
         /**
          * Gets data (object) from Marvel API on random character
          * and saves it to the state of this component.
          */
         
-        this.onCharacterLoading();
+        onCharacterLoading();
 
         const maxId = 1011400;
         const minId = 1011000;
         const randomId = Math.floor(minId + Math.random() * (maxId - minId));
 
-        this.marvelService
+        marvelService
             .getCharacter(randomId)
-            .then(this.onCharacterLoaded)
-            .catch(this.onError);
+            .then(onCharacterLoaded)
+            .catch(onError);
     }
 
-    getContent = () => {
+    const getContent = () => {
         /**
-         * Determines content for rendering
+         * Returns content for rendering
          * depending on error and loaded status.
          */
-        const {character, loaded, error, errorMessage} = this.state;
-
-        /* Return content */
         return (
             error ? 
                 <ErrorView message={errorMessage} flex="row" /> 
@@ -98,38 +85,37 @@ class RandomCharacter extends Component {
                     : <Spinner/>
         );
     }
-    
-    render() {
 
-        const content = this.getContent();
+    /* Rendering */
 
-        return (
-            <section className="random-section">
+    const content = getContent();
 
-                <div className="random-character">
-                    {content}
+    return (
+        <section className="random-section">
+
+            <div className="random-character">
+                {content}
+            </div>
+
+            <div className="random-choose">
+                <p className="random-choose__text">
+                    Random character for today!<br/>
+                    Do you want to get to know him better?
+                </p>
+
+                <div>
+                    <p className="random-choose__text random-choose__text_margined">Or choose another one</p>
+                    <button 
+                        className="app-button app-button_main app-button_on-dark-bg"
+                        onClick={getRandomCharacter}>
+                            Try It
+                    </button>
                 </div>
-
-                <div className="random-choose">
-                    <p className="random-choose__text">
-                        Random character for today!<br/>
-                        Do you want to get to know him better?
-                    </p>
-
-                    <div>
-                        <p className="random-choose__text random-choose__text_margined">Or choose another one</p>
-                        <button 
-                            className="app-button app-button_main app-button_on-dark-bg"
-                            onClick={this.getRandomCharacter}>
-                                Try It
-                        </button>
-                    </div>
-                </div>
-            
-            </section>
-            
-        );
-    }
+            </div>
+        
+        </section>
+        
+    );
 }
 
 const CharacterView = ({character}) => {
@@ -144,7 +130,7 @@ const CharacterView = ({character}) => {
     }
 
     return (
-        <Fragment>
+        <>
             <div className={imageClassNames}>
                 <img src={thumbnail} alt="random character" />
             </div>
@@ -161,7 +147,7 @@ const CharacterView = ({character}) => {
                     <a href={wiki} className="app-button">Wiki</a>
                 </div>
             </div>
-        </Fragment>
+        </>
     );
 }
 
