@@ -10,11 +10,15 @@ import './character-details.scss';
 
 const CharacterDetails = (props) => {
     const {characterId} = props;
+
     /* Component states */
+
     const [character, setCharacter] = useState(null);
     const [loaded, setLoaded] = useState(true);
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+
+    /* Component logic */
 
     const onCharacterLoading = () => {
         /**
@@ -91,7 +95,8 @@ const CharacterDetails = (props) => {
     }, [characterId]);
 
 
-    /* Content definitions */
+    /* Rendering */
+
     const content = getContent();
 
     const characterComics = character?.comics?.map((item, i) => {
