@@ -27,7 +27,6 @@ const RandomCharacter = () => {
          * of this component.
          */
         setCharacter(character);
-        clearError();
     }
 
     const getRandomCharacter = () => {
@@ -35,6 +34,7 @@ const RandomCharacter = () => {
          * Gets data (object) from Marvel API on random character
          * and saves it to the state of this component.
          */
+        clearError();
 
         const maxId = 1011400;
         const minId = 1011000;

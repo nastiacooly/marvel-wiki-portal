@@ -29,7 +29,6 @@ const CharacterDetails = (props) => {
          * of this component.
          */
         setCharacter(character);
-        clearError();
     }
 
     const getCharacterDetails = (id) => {
@@ -40,7 +39,8 @@ const CharacterDetails = (props) => {
         if (!id) {
             return;
         }
-
+        
+        clearError();
         setCharacter(null);
         getCharacter(id)
             .then(onCharacterLoaded);

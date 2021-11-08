@@ -41,8 +41,7 @@ const CharactersList = (props) => {
         
         setCharacters(characters => [...characters, ...newCharacters]);
         setCharactersEnded(ended);
-        setOffset(offset => offset + charactersPerLoad); 
-        clearError();       
+        setOffset(offset => offset + charactersPerLoad);       
     }
 
     const onLoadCharacters = (offset) => {
@@ -51,6 +50,8 @@ const CharactersList = (props) => {
          * 9 characters and saves it to the state 
          * of this component.
          */
+        clearError();
+
         getAllCharacters(offset)
             .then(onCharactersLoaded);
     }
