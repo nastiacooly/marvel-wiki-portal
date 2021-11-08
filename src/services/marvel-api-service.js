@@ -105,10 +105,10 @@ const useMarvelAPIService = (initialLoadedState = false) => {
          * Receives comics data object (formed by Marvel API) 
          * and returns object with transformed data 
          */
-        let price = comics.prices[0].price;
-        if (price === 0) {
-            price = "Not available";
-        }
+
+        /* Price validation */
+        const priceInt = comics.prices[0].price;
+        let price = priceInt === 0 ? "Not Available" : priceInt + "$";
 
         return {
             id: comics.id,
