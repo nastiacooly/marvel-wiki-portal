@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react';
 
-import MarvelAPIService from '../../services/marvel-api-service';
+import useMarvelAPIService from '../../services/marvel-api-service';
 import Spinner from '../spinner/spinner';
 import ErrorView from '../error-view/error-view';
 
@@ -8,14 +8,11 @@ import '../../button.scss';
 import './random-character.scss';
 
 const RandomCharacter = () => {
-    /* Initializing instance to communicate with Marvel API */
-    const marvelService = new MarvelAPIService();
+    /* Initializing instances to communicate with Marvel API and work with 'loaded' and 'error' states */
+    const {loaded, error, errorMessage, getCharacter, clearError} = useMarvelAPIService();
 
     /* Component states */
     const [character, setCharacter] = useState({});
-    const [loaded, setLoaded] = useState(false);
-    const [error, setError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
 
     /* Component logic */
 
@@ -24,34 +21,13 @@ const RandomCharacter = () => {
         getRandomCharacter();
     }, []);
 
-    const onCharacterLoading = () => {
-        /**
-         * Keeps corresponding states
-         * for loading process.
-         */
-        setLoaded(false);
-        setError(false);
-        
-    }
-
     const onCharacterLoaded = (character) => {
         /**
          * Saves character data to state
          * of this component.
          */
         setCharacter(character);
-        setLoaded(true);
-        setError(false);
-    }
-
-    const onError = () => {
-        /**
-         * Keeps track of error in the state.
-         */
-        const message = "Something went wrong. Please try again.";
-        setLoaded(true);
-        setError(true);
-        setErrorMessage(message);
+        clearError();
     }
 
     const getRandomCharacter = () => {
@@ -59,17 +35,13 @@ const RandomCharacter = () => {
          * Gets data (object) from Marvel API on random character
          * and saves it to the state of this component.
          */
-        
-        onCharacterLoading();
 
         const maxId = 1011400;
         const minId = 1011000;
         const randomId = Math.floor(minId + Math.random() * (maxId - minId));
 
-        marvelService
-            .getCharacter(randomId)
-            .then(onCharacterLoaded)
-            .catch(onError);
+        getCharacter(randomId)
+            .then(onCharacterLoaded);
     }
 
     const getContent = () => {
@@ -118,9 +90,9 @@ const RandomCharacter = () => {
     );
 }
 
+
 const CharacterView = ({character}) => {
     const {name, thumbnail, description, homepage, wiki} = character;
-
 
     /* Change styles for a "not found" image */
     const imageNotFound = "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg";

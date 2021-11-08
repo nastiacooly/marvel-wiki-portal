@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 
-import MarvelAPIService from '../../services/marvel-api-service';
+import useMarvelAPIService from '../../services/marvel-api-service';
 import ErrorView from '../error-view/error-view';
 import Spinner from '../spinner/spinner';
 import Skeleton from '../skeleton/skeleton';
@@ -11,24 +11,17 @@ import './character-details.scss';
 const CharacterDetails = (props) => {
     const {characterId} = props;
 
-    /* Component states */
+    /* Initializing instances to communicate with Marvel API and work with 'loaded' and 'error' states */
+    const {loaded, error, errorMessage, getCharacter, clearError} = useMarvelAPIService(true);
 
+    /* Component states */
     const [character, setCharacter] = useState(null);
-    const [loaded, setLoaded] = useState(true);
-    const [error, setError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
 
     /* Component logic */
 
-    const onCharacterLoading = () => {
-        /**
-         * Keeps corresponding states
-         * for loading process.
-         */
-        setLoaded(false);
-        setError(false);
-        setCharacter(null);
-    }
+    useEffect(() => {
+        getCharacterDetails(characterId);
+    }, [characterId]);
 
     const onCharacterLoaded = (character) => {
         /**
@@ -36,18 +29,21 @@ const CharacterDetails = (props) => {
          * of this component.
          */
         setCharacter(character);
-        setLoaded(true);
-        setError(false);
+        clearError();
     }
 
-    const onError = () => {
+    const getCharacterDetails = (id) => {
         /**
-         * Keeps track of error in the state.
+         * Gets data (object) from Marvel API on selected character
+         * and saves it to the state of this component.
          */
-        const errorMessage = "Something went wrong. Please try again.";
-        setLoaded(true);
-        setError(true);
-        setErrorMessage(errorMessage);
+        if (!id) {
+            return;
+        }
+
+        setCharacter(null);
+        getCharacter(id)
+            .then(onCharacterLoaded);
     }
 
     const getContent = () => {
@@ -63,37 +59,6 @@ const CharacterDetails = (props) => {
                         : <Spinner/>
         );
     }
-
-    useEffect(() => {
-        /**
-         * Updates character details
-         * when user selects new character
-         * (with different id).
-         */
-
-        /* Initializing an instance to communicate with Marvel API */
-        const marvelService = new MarvelAPIService();
-
-        const getCharacterDetails = (id) => {
-            /**
-             * Gets data (object) from Marvel API on selected character
-             * and saves it to the state of this component.
-             */
-            if (!id) {
-                return;
-            }
-    
-            onCharacterLoading();
-    
-            marvelService
-                .getCharacter(id)
-                .then(onCharacterLoaded)
-                .catch(onError);
-        }
-
-        getCharacterDetails(characterId);
-    }, [characterId]);
-
 
     /* Rendering */
 

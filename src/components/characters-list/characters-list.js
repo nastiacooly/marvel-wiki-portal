@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 
-import MarvelAPIService from '../../services/marvel-api-service';
+import useMarvelAPIService from '../../services/marvel-api-service';
 
 import CharacterCard from '../character-card/character-card';
 import ErrorView from '../error-view/error-view';
@@ -11,17 +11,14 @@ import './characters-list.scss';
 
 const CharactersList = (props) => {
     const {onCharacterCardSelected, activeCharacterCard} = props;
-    /* Initializing an instance to communicate with Marvel API */
-    const marvelService = new MarvelAPIService();
+    /* Initializing instances to communicate with Marvel API */
+    const marvelService = useMarvelAPIService();
     const baseOffset = marvelService._baseCharactersOffset;
     const charactersPerLoad = marvelService._baseCharactersLimit;
+    const {loaded, error, errorMessage, newItemsLoading, clearError, getAllCharacters} = marvelService;
     /* Component states */
     const [characters, setCharacters] = useState([]);
-    const [loaded, setLoaded] = useState(false);
-    const [newItemsLoading, setNewItemsLoading] = useState(false);
     const [charactersEnded, setCharactersEnded] = useState(false);
-    const [error, setError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
     const [offset, setOffset] = useState(baseOffset);
 
     /* Component logic */
@@ -43,31 +40,9 @@ const CharactersList = (props) => {
         }
         
         setCharacters(characters => [...characters, ...newCharacters]);
-        setLoaded(true);
-        setNewItemsLoading(false);
         setCharactersEnded(ended);
-        setOffset(offset => offset + charactersPerLoad);        
-    }
-
-    const onCharactersLoading = () => {
-        /**
-         * Keeps corresponding states
-         * for loading process.
-         */
-        setLoaded(false);
-        setError(false);
-        setNewItemsLoading(true);
-    }
-
-    const onError = () => {
-        /**
-         * Keeps track of error in the state.
-         */
-        const message = "Something went wrong. Please try updating the page.";
-        setLoaded(true);
-        setError(true);
-        setNewItemsLoading(false);
-        setErrorMessage(message);
+        setOffset(offset => offset + charactersPerLoad); 
+        clearError();       
     }
 
     const onLoadCharacters = (offset) => {
@@ -76,12 +51,8 @@ const CharactersList = (props) => {
          * 9 characters and saves it to the state 
          * of this component.
          */
-        onCharactersLoading();
-
-        marvelService
-            .getAllCharacters(offset)
-            .then(onCharactersLoaded)
-            .catch(onError);
+        getAllCharacters(offset)
+            .then(onCharactersLoaded);
     }
 
     const renderCharacterCards = (characters) => {

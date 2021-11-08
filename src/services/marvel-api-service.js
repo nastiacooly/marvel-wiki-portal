@@ -1,26 +1,26 @@
+import useHttp from '../hooks/http.hook';
+
 import publicApiKey from './api-key';
 
-class MarvelAPIService {
-    _apiBase = "https://gateway.marvel.com:443/v1/public";
-    _apiKeyBase = "apikey=";
-    _baseCharactersOffset = 210; /* number of characters to pass from the begginnng of the list */
-    _baseCharactersLimit = 9; /* characters per load */
-    _apiUrls = {
-        allCharacters: `${this._apiBase}/characters?`,
-        singleCharacter: `${this._apiBase}/characters/`,
+const useMarvelAPIService = (initialLoadedState = false) => {
+    /**
+     * Custom hook to work with Marvel API.
+     * Returns methods for getting characters
+     * and returns corresponding state values.
+     * Based on custom 'useHttp' hook.
+     */
+    const {loaded, error, errorMessage, request, clearError} = useHttp(initialLoadedState);
+
+    const _apiBase = "https://gateway.marvel.com:443/v1/public";
+    const _apiKeyBase = "apikey=";
+    const _baseCharactersOffset = 210; /* number of characters to pass from the begginnng of the list */
+    const _baseCharactersLimit = 9; /* characters per load */
+    const _apiUrls = {
+        allCharacters: `${_apiBase}/characters?`,
+        singleCharacter: `${_apiBase}/characters/`,
     }
 
-    getResource = async (url) => {
-        let res = await fetch(url);
-
-        if (!res.ok) {
-            throw new Error(`Could not fetch ${url}, status: ${res.status}`);
-        }
-
-        return await res.json();
-    }
-
-    getAllCharacters = async (offset = this._baseCharactersOffset) => {
+    const getAllCharacters = async (offset = _baseCharactersOffset) => {
         /**
          * Fetches data from Marvel API
          * on all characters (limited in this._baseCharactersLimit).
@@ -28,14 +28,14 @@ class MarvelAPIService {
          * Returns array with all characters with data 
          * transformed for each character.
          */
-        const response = await this.getResource(
-            this._apiUrls.allCharacters 
-            + `limit=${this._baseCharactersLimit}&offset=${offset}&${this._apiKeyBase}${publicApiKey}`
+        const response = await request(
+            _apiUrls.allCharacters 
+            + `limit=${_baseCharactersLimit}&offset=${offset}&${_apiKeyBase}${publicApiKey}`
         );
-        return response.data.results.map(this._transformCharacterData);
+        return response.data.results.map(_transformCharacterData);
     }
 
-    getCharacter = async (id) => {
+    const getCharacter = async (id) => {
         /**
          * Fetches data from Marvel API
          * on a character by its unique id.
@@ -45,18 +45,18 @@ class MarvelAPIService {
         if (id.toString().length < 7) {
             throw new Error('Invalid id of a character');
         }
-        const response = await this.getResource(
-            this._apiUrls.singleCharacter 
+        const response = await request(
+            _apiUrls.singleCharacter 
             + id 
             + "?" 
-            + this._apiKeyBase 
+            + _apiKeyBase 
             + publicApiKey
             );
         const characterMainData = response.data.results[0];
-        return this._transformCharacterData(characterMainData);
+        return _transformCharacterData(characterMainData);
     }
 
-    _transformCharacterData = (character) => {
+    const _transformCharacterData = (character) => {
         /**
          * Receives character data object (formed by Marvel API) 
          * and returns object with transformed character data 
@@ -82,6 +82,15 @@ class MarvelAPIService {
             comics: character.comics.items,
         }
     }
+
+    return {_baseCharactersLimit,
+            _baseCharactersOffset,
+            loaded, 
+            error, 
+            errorMessage, 
+            clearError, 
+            getAllCharacters, 
+            getCharacter};
 }
 
-export default MarvelAPIService;
+export default useMarvelAPIService;
