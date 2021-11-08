@@ -1,0 +1,16 @@
+.comics-section {
+    width: 100%;
+    margin-top: 50px;
+    
+    &__list {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 100%;
+        gap: 65px;
+        row-gap: 55px;
+        align-items: center;
+        justify-content: center;
+        list-style-type: none;
+    }
+}

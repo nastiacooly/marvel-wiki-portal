@@ -15,15 +15,17 @@ const useMarvelAPIService = (initialLoadedState = false) => {
     const _apiKeyBase = "apikey=";
     const _baseCharactersOffset = 210; /* number of characters to pass from the begginnng of the list */
     const _baseCharactersLimit = 9; /* characters per load */
+    const _baseComicsLimit = 8; /* comics per load */
     const _apiUrls = {
         allCharacters: `${_apiBase}/characters?`,
         singleCharacter: `${_apiBase}/characters/`,
+        allComics: `${_apiBase}/comics?`
     }
 
     const getAllCharacters = async (offset = _baseCharactersOffset) => {
         /**
          * Fetches data from Marvel API
-         * on all characters (limited in this._baseCharactersLimit).
+         * on all characters (limited in _baseCharactersLimit).
          * Takes optional argument for characters offset (number).
          * Returns array with all characters with data 
          * transformed for each character.
@@ -56,6 +58,21 @@ const useMarvelAPIService = (initialLoadedState = false) => {
         return _transformCharacterData(characterMainData);
     }
 
+    const getAllComics = async (offset = 0) => {
+        /**
+         * Fetches data from Marvel API
+         * on all comics (limited in _baseComicsLimit).
+         * Returns array with all comics with data 
+         * transformed for each comics.
+         */
+        const response = await request(
+            _apiUrls.allComics 
+            + `limit=${_baseComicsLimit}&offset=${offset}&${_apiKeyBase}${publicApiKey}`
+        );
+
+        return response.data.results.map(_transformComicsData);
+    }
+
     const _transformCharacterData = (character) => {
         /**
          * Receives character data object (formed by Marvel API) 
@@ -83,14 +100,38 @@ const useMarvelAPIService = (initialLoadedState = false) => {
         }
     }
 
-    return {_baseCharactersLimit,
-            _baseCharactersOffset,
-            loaded, 
-            error, 
-            errorMessage, 
-            clearError, 
-            getAllCharacters, 
-            getCharacter};
+    const _transformComicsData = (comics) => {
+        /**
+         * Receives comics data object (formed by Marvel API) 
+         * and returns object with transformed data 
+         */
+        let price = comics.prices[0].price;
+        if (price === 0) {
+            price = "Not available";
+        }
+
+        return {
+            id: comics.id,
+            title: comics.title,
+            description: comics.description,
+            price: price,
+            thumbnail: comics.thumbnail.path + "." + comics.thumbnail.extension,
+            pages: comics.pageCount,
+        }
+    }
+
+    return {
+        _baseCharactersLimit,
+        _baseCharactersOffset,
+        _baseComicsLimit,
+        loaded, 
+        error, 
+        errorMessage, 
+        clearError, 
+        getAllCharacters, 
+        getCharacter,
+        getAllComics
+        };
 }
 
 export default useMarvelAPIService;
