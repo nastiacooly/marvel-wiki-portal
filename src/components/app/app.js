@@ -1,70 +1,30 @@
-import { useState } from 'react';
 import { 
   BrowserRouter as Router, 
   Route, 
   Routes 
 } from 'react-router-dom';
 
-import AppHeader from '../app-header/app-header';
+/* Pages */
+import {CharactersPage, ComicsPage} from '../pages';
+
+/* Other Components */
 import AppBanner from '../app-banner/app-banner';
-import RandomCharacter from '../random-character/random-character';
-import CharactersList from '../characters-list/characters-list';
-import CharacterDetails from '../character-details/character-details';
-import ComicsList from '../comics-list/comics-list';
+import AppHeader from '../app-header/app-header';
 import ComicsDetails from '../comics-details/comics-details';
 
-/* import ErrorBoundary from '../error-boundary/error-boundary'; */
-
-import vision from '../../static/img/bottom_bg.png';
-
+/* Styles */
 import './app.scss';
 
 const App = () => {
-  const [activeCharacterCard, setActiveCharacterCard] = useState(null);
-
-  const onCharacterCardSelected = (id) => {
-    setActiveCharacterCard(id);
-  }
 
   return (
     <Router>
-
       <div className="app-container">
         <AppHeader />
-
         <main>
-
           <Routes>
-
-            <Route path="/" element={
-                <>
-                  <RandomCharacter />
-                  <div className="characters-container">
-                      <CharactersList 
-                        activeCharacterCard={activeCharacterCard} 
-                        onCharacterCardSelected={onCharacterCardSelected}
-                      />
-                      <CharacterDetails characterId={activeCharacterCard}/>
-                  </div>
-
-                  <div className="bg-decoration">
-                    <img 
-                      src={vision} 
-                      alt="Vision Character in Attacking Pose" 
-                      className="bg-decoration__image"
-                    />
-                  </div>
-                </>
-              } 
-            />
-
-            <Route path="/comics" element={
-                <>
-                  <AppBanner/>
-                  <ComicsList />
-                </>
-              } 
-            >
+            <Route path="/" element={<CharactersPage/>} />
+            <Route path="/comics" element={<ComicsPage/>} >
               <Route path=":comicsId" element={
                   <>
                     <AppBanner/>
@@ -79,12 +39,9 @@ const App = () => {
                 }
               />
             </Route>
-
           </Routes>
         </main>
-
       </div>
-
     </Router>
   );
 }

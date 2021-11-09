@@ -1,36 +1,24 @@
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { Link, NavLink } from 'react-router-dom';
 
 import './app-header.scss';
 
-const AppHeader = () => {
-    /* Component states */
-    const [activeSection, setActiveSection] = useState('Characters');
-
-    const onChooseSection = (e) => {
-        setActiveSection(e.target.textContent);
-    }
-
-    /* Links classNames */
-    const linkDefaultClassName = 'app-menu__item';
-    const activeLinkClassName = ' app-menu__item_chosen';
-    let charactersLinkClassNames = activeSection === 'Characters' ? linkDefaultClassName + activeLinkClassName : linkDefaultClassName;
-    let comicsLinkClassName = activeSection === 'Comics' ? linkDefaultClassName + activeLinkClassName : linkDefaultClassName;
-    
+const AppHeader = () => {    
     return (
         <header className="app-header">
             <h1 className="app-name">
+                <Link to="/">
                 <span className="app-name__main-title">Marvel</span> Wiki Portal
+                </Link>
             </h1>
 
             <nav className="app-menu">
                 <ul className="app-menu__list">
-                    <li className={charactersLinkClassNames}>
-                        <Link to="/" onClick={onChooseSection}>Characters</Link>
+                    <li className='app-menu__item'>
+                        <NavLink to="/" activeClassName="active">Characters</NavLink>
                     </li>
                     /
-                    <li className={comicsLinkClassName}>
-                        <Link to="/comics" onClick={onChooseSection}>Comics</Link>
+                    <li className='app-menu__item'>
+                        <NavLink to="/comics" activeClassName="active">Comics</NavLink>
                     </li>
                 </ul>
 

@@ -15,7 +15,7 @@ const useMarvelAPIService = (initialLoadedState = false) => {
     const _apiKeyBase = "apikey=";
     const _baseCharactersOffset = 210; /* number of characters to pass from the begginnng of the list */
     const _baseCharactersLimit = 9; /* characters per load */
-    const _baseComicsLimit = 8; /* comics per load */
+    const _baseComicsLimit = 4; /* comics per load */
     const _apiUrls = {
         allCharacters: `${_apiBase}/characters?`,
         singleCharacter: `${_apiBase}/characters/`,

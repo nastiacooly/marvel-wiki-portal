@@ -32,10 +32,7 @@ $main-color: #9F0013;
     &__item {
         transition: 0.3s transform;
 
-        a {
-            color: black;
-        }
-        &_chosen a {
+        a.active {
             color: $main-color;
         }
 
