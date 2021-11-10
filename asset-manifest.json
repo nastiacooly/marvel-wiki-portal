@@ -1,22 +1,24 @@
 {
   "files": {
-    "main.css": "/marvel-wiki-portal/static/css/main.621204c9.chunk.css",
-    "main.js": "/marvel-wiki-portal/static/js/main.8d429a55.chunk.js",
-    "main.js.map": "/marvel-wiki-portal/static/js/main.8d429a55.chunk.js.map",
+    "main.css": "/marvel-wiki-portal/static/css/main.7de93b79.chunk.css",
+    "main.js": "/marvel-wiki-portal/static/js/main.68cf9265.chunk.js",
+    "main.js.map": "/marvel-wiki-portal/static/js/main.68cf9265.chunk.js.map",
     "runtime-main.js": "/marvel-wiki-portal/static/js/runtime-main.cd00cc0a.js",
     "runtime-main.js.map": "/marvel-wiki-portal/static/js/runtime-main.cd00cc0a.js.map",
-    "static/js/2.0fe4fc27.chunk.js": "/marvel-wiki-portal/static/js/2.0fe4fc27.chunk.js",
-    "static/js/2.0fe4fc27.chunk.js.map": "/marvel-wiki-portal/static/js/2.0fe4fc27.chunk.js.map",
+    "static/js/2.888e6f88.chunk.js": "/marvel-wiki-portal/static/js/2.888e6f88.chunk.js",
+    "static/js/2.888e6f88.chunk.js.map": "/marvel-wiki-portal/static/js/2.888e6f88.chunk.js.map",
     "index.html": "/marvel-wiki-portal/index.html",
-    "static/css/main.621204c9.chunk.css.map": "/marvel-wiki-portal/static/css/main.621204c9.chunk.css.map",
-    "static/js/2.0fe4fc27.chunk.js.LICENSE.txt": "/marvel-wiki-portal/static/js/2.0fe4fc27.chunk.js.LICENSE.txt",
+    "static/css/main.7de93b79.chunk.css.map": "/marvel-wiki-portal/static/css/main.7de93b79.chunk.css.map",
+    "static/js/2.888e6f88.chunk.js.LICENSE.txt": "/marvel-wiki-portal/static/js/2.888e6f88.chunk.js.LICENSE.txt",
+    "static/media/Avengers.c29e0ef0.png": "/marvel-wiki-portal/static/media/Avengers.c29e0ef0.png",
+    "static/media/Avengers_logo.9b944f71.png": "/marvel-wiki-portal/static/media/Avengers_logo.9b944f71.png",
     "static/media/bottom_bg.4d6f9671.png": "/marvel-wiki-portal/static/media/bottom_bg.4d6f9671.png",
     "static/media/random-character.scss": "/marvel-wiki-portal/static/media/shield.e522b74c.png"
   },
   "entrypoints": [
     "static/js/runtime-main.cd00cc0a.js",
-    "static/js/2.0fe4fc27.chunk.js",
-    "static/css/main.621204c9.chunk.css",
-    "static/js/main.8d429a55.chunk.js"
+    "static/js/2.888e6f88.chunk.js",
+    "static/css/main.7de93b79.chunk.css",
+    "static/js/main.68cf9265.chunk.js"
   ]
 }
