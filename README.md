@@ -1,8 +1,6 @@
 # Marvel Wiki Portal
 
-In process.
-
-You can already [try](https://nastiacooly.github.io/marvel-wiki-portal/) some features of the app deployed on GitHub Pages.
+You can [try](https://nastiacooly.github.io/marvel-wiki-portal/) the app deployed on GitHub Pages.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -12,17 +10,22 @@ Marvel Wiki Portal is a web-app about Marvel characters and comics.
 
 This is my SPA for practicing React skills.
 
+## What can it do?
+
+Marvel Wiki Portal provides the following features:
+- Getting random character to learn more about;
+- Loading many characters (9 per request) and clicking on a character to read about them;
+- Loading many comics (4 per request) and clicking on a comics to learn more details about it.
+
 ## Where all the information comes from?
 
-All the information about characters and comics received from [Marvel API](https://developer.marvel.com/).
+All the information about characters and comics is received from [Marvel API](https://developer.marvel.com/).
 
 ## Which technologies were used?
 
-Backend (API): [Marvel API](https://developer.marvel.com/).
-
 Frontend: HTML5, CSS3 (Scss), React.
 
-All the information about characters and comics received from [Marvel API](https://developer.marvel.com/).
+Backend (API): [Marvel API](https://developer.marvel.com/).
 
 ## How to run the app locally with your own Marvel API key?
 
