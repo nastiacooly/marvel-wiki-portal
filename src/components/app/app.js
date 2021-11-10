@@ -5,7 +5,11 @@ import {
 } from 'react-router-dom';
 
 /* Pages */
-import {CharactersPage, ComicsPage} from '../pages';
+import {
+  CharactersPage, 
+  ComicsPage,
+  NotFound
+} from '../pages';
 
 /* Other Components */
 import AppBanner from '../app-banner/app-banner';
@@ -39,6 +43,7 @@ const App = () => {
                 }
               />
             </Route>
+            <Route path="*" element={<NotFound />}/>
           </Routes>
         </main>
       </div>
