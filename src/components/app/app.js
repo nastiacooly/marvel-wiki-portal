@@ -26,10 +26,10 @@ const App = () => {
         <AppHeader />
         <main>
           <Routes>
-            <Route path="/" element={<CharactersPage/>} />
-            <Route path="/comics" element={<ComicsPage/>} />
-            <Route path="/comics/:comicsId" element={<ComicsDetails/>} />
-            <Route path="*" element={<NotFound />}/>
+            <Route path="/marvel-wiki-portal" element={<CharactersPage/>} />
+            <Route path="/marvel-wiki-portal/comics" element={<ComicsPage/>} />
+            <Route path="/marvel-wiki-portal/comics/:comicsId" element={<ComicsDetails/>} />
+            <Route path="/marvel-wiki-portal/*" element={<NotFound />}/>
           </Routes>
         </main>
         <footer>

@@ -18,7 +18,7 @@ const ComicsCard = (props) => {
             tabIndex="0"
             id={id}
         >
-            <Link to={`/comics/${id}`}>
+            <Link to={`/marvel-wiki-portal/comics/${id}`}>
                 <div className={imageClassNames}>
                     <img src={image} alt={`Cover of ${title} comics`} />
                 </div>

@@ -110,7 +110,7 @@ const ComicsDetailsView = ({comics}) => {
             </div>
 
             <div className="comics-info__links">
-                <Link to="/comics" className="comics-info__link">Back to all</Link>
+                <Link to="/marvel-wiki-portal/comics" className="comics-info__link">Back to all</Link>
             </div>
         </div>
     );
