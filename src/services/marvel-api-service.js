@@ -19,7 +19,8 @@ const useMarvelAPIService = (initialLoadedState = false) => {
     const _apiUrls = {
         allCharacters: `${_apiBase}/characters?`,
         singleCharacter: `${_apiBase}/characters/`,
-        allComics: `${_apiBase}/comics?`
+        allComics: `${_apiBase}/comics?`,
+        singleComics: `${_apiBase}/comics/`,
     }
 
     const getAllCharacters = async (offset = _baseCharactersOffset) => {
@@ -73,6 +74,24 @@ const useMarvelAPIService = (initialLoadedState = false) => {
         return response.data.results.map(_transformComicsData);
     }
 
+    const getSingleComics = async (id) => {
+        /**
+         * Fetches data from Marvel API
+         * on a comics by its unique id.
+         * Throws error in case of invalid id.
+         * Returns JS-object with transformed data.
+         */
+        const response = await request(
+            _apiUrls.singleComics 
+            + id 
+            + "?" 
+            + _apiKeyBase 
+            + publicApiKey
+            );
+        const comicsMainData = response.data.results[0];
+        return _transformComicsData(comicsMainData);
+    }
+
     const _transformCharacterData = (character) => {
         /**
          * Receives character data object (formed by Marvel API) 
@@ -107,16 +126,19 @@ const useMarvelAPIService = (initialLoadedState = false) => {
          */
 
         /* Price validation */
-        const priceInt = comics.prices[0].price;
-        let price = priceInt === 0 ? "Not Available" : priceInt + "$";
+        const price = comics.prices[0].price ? `${comics.prices[0].price}$` : "Price Not Available";
+
+        /* Pages validation */
+        const pages = comics.pageCount ? `${comics.pageCount} pages` : "Unknown number of pages";
 
         return {
             id: comics.id,
             title: comics.title,
-            description: comics.description,
+            description: comics.description || 'No description available',
             price: price,
             thumbnail: comics.thumbnail.path + "." + comics.thumbnail.extension,
-            pages: comics.pageCount,
+            pages: pages,
+            language: comics.textObjects.language || 'en-US'
         }
     }
 
@@ -130,7 +152,8 @@ const useMarvelAPIService = (initialLoadedState = false) => {
         clearError, 
         getAllCharacters, 
         getCharacter,
-        getAllComics
+        getAllComics,
+        getSingleComics
         };
 }
 

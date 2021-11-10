@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 import './comics-card.scss';
 
 const ComicsCard = (props) => {
@@ -16,14 +18,16 @@ const ComicsCard = (props) => {
             tabIndex="0"
             id={id}
         >
-            <div className={imageClassNames}>
-                <img src={image} alt="Comics Cover" />
-            </div>
+            <Link to={`/comics/${id}`}>
+                <div className={imageClassNames}>
+                    <img src={image} alt={`Cover of ${title} comics`} />
+                </div>
 
-            <div className="comics-card__details">
-                <h3 className="comics-card__title">{title}</h3>
-                <span className="comics-card__price">{price}</span>
-            </div>
+                <div className="comics-card__details">
+                    <h3 className="comics-card__title">{title}</h3>
+                    <span className="comics-card__price">{price}</span>
+                </div>
+            </Link>
         </li>
     );
 }

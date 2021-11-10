@@ -14,11 +14,11 @@ const AppHeader = () => {
             <nav className="app-menu">
                 <ul className="app-menu__list">
                     <li className='app-menu__item'>
-                        <NavLink to="/" activeClassName="active">Characters</NavLink>
+                        <NavLink to="/">Characters</NavLink>
                     </li>
                     /
                     <li className='app-menu__item'>
-                        <NavLink to="/comics" activeClassName="active">Comics</NavLink>
+                        <NavLink to="/comics">Comics</NavLink>
                     </li>
                 </ul>
 

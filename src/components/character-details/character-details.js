@@ -55,7 +55,7 @@ const CharacterDetails = (props) => {
             error ? 
                 <ErrorView message={errorMessage} flex="row" /> 
                 : loaded ? 
-                    (character ? <CharacterDetailsView character={character}/> : <Skeleton/>)
+                    <CharacterDetailsView character={character}/>
                         : <Spinner/>
         );
     }
@@ -87,7 +87,12 @@ const CharacterDetails = (props) => {
 const CharacterDetailsView = ({character}) => {
     /**
      * Returns element with character details.
+     * If no character chosen, returns default skeleton.
      */
+    if (!character) {
+        return <Skeleton/>;
+    }
+
     const {name, thumbnail, description, homepage, wiki} = character;
 
     /* Change styles for a "not found" image */

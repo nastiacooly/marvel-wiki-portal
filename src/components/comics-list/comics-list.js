@@ -63,9 +63,9 @@ const ComicsList = () => {
         }
 
         /* Mapping comics to ComicsCard components */
-        return comics.map( ({id, title, price, thumbnail}) => {
+        return comics.map( ({id, title, price, thumbnail}, i) => {
             return <ComicsCard 
-                        key={id} 
+                        key={i} 
                         id={id}
                         title={title} 
                         image={thumbnail}
