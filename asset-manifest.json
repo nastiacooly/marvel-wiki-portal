@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/marvel-wiki-portal/static/css/main.7de93b79.chunk.css",
-    "main.js": "/marvel-wiki-portal/static/js/main.68cf9265.chunk.js",
-    "main.js.map": "/marvel-wiki-portal/static/js/main.68cf9265.chunk.js.map",
+    "main.js": "/marvel-wiki-portal/static/js/main.f80ec29b.chunk.js",
+    "main.js.map": "/marvel-wiki-portal/static/js/main.f80ec29b.chunk.js.map",
     "runtime-main.js": "/marvel-wiki-portal/static/js/runtime-main.cd00cc0a.js",
     "runtime-main.js.map": "/marvel-wiki-portal/static/js/runtime-main.cd00cc0a.js.map",
     "static/js/2.888e6f88.chunk.js": "/marvel-wiki-portal/static/js/2.888e6f88.chunk.js",
@@ -19,6 +19,6 @@
     "static/js/runtime-main.cd00cc0a.js",
     "static/js/2.888e6f88.chunk.js",
     "static/css/main.7de93b79.chunk.css",
-    "static/js/main.68cf9265.chunk.js"
+    "static/js/main.f80ec29b.chunk.js"
   ]
 }
