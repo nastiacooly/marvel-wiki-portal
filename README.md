@@ -13,9 +13,10 @@ This is my SPA for practicing React skills.
 ## What can it do?
 
 Marvel Wiki Portal provides the following features:
-- Getting random character to learn more about;
-- Loading many characters (9 per request) and clicking on a character to read about them;
-- Loading many comics (4 per request) and clicking on a comics to learn more details about it.
+- Learning more about random Marvel character and getting links to their homepage and wiki;
+- Learning more about all characters by loading and clicking their cards;
+- Learning more about comics mentioning specific character by clicking on a comic title at character's info;
+- Learning more about all comics by loading and clicking their cards.
 
 ## Where all the information comes from?
 
