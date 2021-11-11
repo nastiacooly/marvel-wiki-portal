@@ -1,4 +1,5 @@
 import {useState, useEffect} from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import useMarvelAPIService from '../../services/marvel-api-service';
@@ -12,10 +13,11 @@ const CharacterDetails = (props) => {
     const {characterId} = props;
 
     /* Initializing instances to communicate with Marvel API and work with 'loaded' and 'error' states */
-    const {loaded, error, errorMessage, getCharacter, clearError} = useMarvelAPIService(true);
+    const {loaded, error, errorMessage, getCharacter, getCharacterComics, clearError} = useMarvelAPIService(true);
 
     /* Component states */
     const [character, setCharacter] = useState(null);
+    const [characterComics, setCharacterComics] = useState([]);
 
     /* Component logic */
 
@@ -31,9 +33,18 @@ const CharacterDetails = (props) => {
         setCharacter(character);
     }
 
+    const onCharacterComicsLoaded = (comics) => {
+        /**
+         * Saves character data to state
+         * of this component.
+         */
+        setCharacterComics(comics);
+    }
+
     const getCharacterDetails = (id) => {
         /**
          * Gets data (object) from Marvel API on selected character
+         * and comics mentioning him 
          * and saves it to the state of this component.
          */
         if (!id) {
@@ -42,8 +53,11 @@ const CharacterDetails = (props) => {
         
         clearError();
         setCharacter(null);
+        setCharacterComics([]);
         getCharacter(id)
-            .then(onCharacterLoaded);
+            .then(onCharacterLoaded)
+            .then(() => getCharacterComics(id))
+            .then(onCharacterComicsLoaded);
     }
 
     const getContent = () => {
@@ -61,16 +75,13 @@ const CharacterDetails = (props) => {
     }
 
     /* Rendering */
-
     const content = getContent();
 
-    const characterComics = character?.comics?.map((item, i) => {
-        return <CharacterComicsView key={i} name={item.name}/>
+    const comics = characterComics.map(({id, title, thumbnail}) => {
+        return <CharacterComicsView key={id} id={id} title={title} image={thumbnail}/>
     });
 
-    const comicsContent = characterComics && characterComics.length > 0 ? 
-                            (<><h5>Comics:</h5> {characterComics}</>) 
-                            : null;
+    const comicsContent = comics.length > 0 ? (<><h5>Comics:</h5> {comics}</>) : null;
 
     return (
         <div className="character-info">
@@ -128,9 +139,16 @@ const CharacterDetailsView = ({character}) => {
 
 
 const CharacterComicsView = (props) => {
+    const {id, title, image} = props;
+
     return (
         <li className="character-info__single-comics">
-            {props.name}
+            <Link to={`/marvel-wiki-portal/comics/${id}`} className="character-info__single-comics_on-hover">
+                <h6>{title}</h6>
+                <div>
+                    <img src={image} alt={`Cover of ${title} comics`}/>
+                </div>
+            </Link>
         </li>
     );
 }

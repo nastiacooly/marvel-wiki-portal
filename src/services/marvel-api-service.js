@@ -92,6 +92,28 @@ const useMarvelAPIService = (initialLoadedState = false) => {
         return _transformComicsData(comicsMainData);
     }
 
+    const getCharacterComics = async (id) => {
+        /**
+         * Fetches data from Marvel API
+         * on comics containig specific character by his unique id.
+         * Throws error in case of invalid id.
+         * Returns array with comics with transformed data
+         * on each comics.
+         */
+        if (id.toString().length < 7) {
+            throw new Error('Invalid id of a character');
+        }
+        const response = await request(
+            _apiUrls.singleCharacter 
+            + id 
+            + "/comics?" 
+            + _apiKeyBase 
+            + publicApiKey
+            );
+            
+        return response.data.results.map(_transformComicsData);
+    }
+
     const _transformCharacterData = (character) => {
         /**
          * Receives character data object (formed by Marvel API) 
@@ -114,8 +136,7 @@ const useMarvelAPIService = (initialLoadedState = false) => {
             description: description,
             thumbnail: character.thumbnail.path + "." + character.thumbnail.extension,
             homepage: character.urls[0].url,
-            wiki: character.urls[1].url,
-            comics: character.comics.items,
+            wiki: character.urls[1].url
         }
     }
 
@@ -153,7 +174,8 @@ const useMarvelAPIService = (initialLoadedState = false) => {
         getAllCharacters, 
         getCharacter,
         getAllComics,
-        getSingleComics
+        getSingleComics,
+        getCharacterComics
         };
 }
 
