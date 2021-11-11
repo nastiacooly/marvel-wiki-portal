@@ -23,6 +23,7 @@ const CharacterDetails = (props) => {
 
     useEffect(() => {
         getCharacterDetails(characterId);
+        window.scrollTo(0, 0);
     }, [characterId]);
 
     const onCharacterLoaded = (character) => {
