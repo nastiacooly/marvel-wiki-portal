@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -12,6 +12,9 @@ import './character-details.scss';
 const CharacterDetails = (props) => {
     const {characterId} = props;
 
+    /* Ref for correct scrolling to character details component */
+    const characterInfoRef = useRef(null);
+
     /* Initializing instances to communicate with Marvel API and work with 'loaded' and 'error' states */
     const {loaded, error, errorMessage, getCharacter, getCharacterComics, clearError} = useMarvelAPIService(true);
 
@@ -23,8 +26,18 @@ const CharacterDetails = (props) => {
 
     useEffect(() => {
         getCharacterDetails(characterId);
-        window.scrollTo(0, 0);
+        onCharacterSelected();
     }, [characterId]);
+
+    const onCharacterSelected = () => {
+        /**
+         * Smoothly scrolls page to character info element
+         * on selection of character card.
+         */
+        let clientCoords = characterInfoRef.current.getBoundingClientRect();
+        let scrollTop = window.scrollY + clientCoords.top;
+        window.scrollTo(0, scrollTop);
+    }
 
     const onCharacterLoaded = (character) => {
         /**
@@ -85,7 +98,7 @@ const CharacterDetails = (props) => {
     const comicsContent = comics.length > 0 ? (<><h5>Comics:</h5> {comics}</>) : null;
 
     return (
-        <div className="character-info">
+        <div className="character-info" ref={characterInfoRef}>
             {content}
             <ul className="character-info__comics">
                 {comicsContent}
