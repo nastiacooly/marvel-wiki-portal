@@ -1,17 +1,15 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-import AppBanner from '../../app-banner/app-banner';
-import useMarvelAPIService from '../../../services/marvel-api-service';
-import ErrorBoundary from '../../error-boundary/error-boundary';
-import ErrorView from '../../error-view/error-view';
-import Spinner from '../../spinner/spinner';
+import useMarvelAPIService from '../../services/marvel-api-service';
+import ErrorView from '../error-view/error-view';
+import Spinner from '../spinner/spinner';
 
 import './comics-details.scss';
 
 
-const ComicsDetails = () => {
-    let { comicsId } = useParams();
+const ComicsDetails = (props) => {
+    const {comicsId} = props;
 
     /* Initializing instances to communicate with Marvel API and work with 'loaded' and 'error' states */
     const {loaded, error, errorMessage, getSingleComics, clearError} = useMarvelAPIService();
@@ -57,17 +55,9 @@ const ComicsDetails = () => {
     }
 
     /* Rendering */
-
     const content = getContent();
 
-    return (
-        <>
-            <AppBanner/>
-            <ErrorBoundary>
-                {content}
-            </ErrorBoundary>
-        </>
-    );
+    return (<>{content}</>);
 }
 
 

@@ -8,7 +8,7 @@ import {
 import {
   CharactersPage, 
   ComicsPage,
-  ComicsDetails,
+  SingleComicsPage,
   NotFound
 } from '../pages';
 
@@ -28,7 +28,7 @@ const App = () => {
           <Routes>
             <Route path="/marvel-wiki-portal" element={<CharactersPage/>} />
             <Route path="/marvel-wiki-portal/comics" element={<ComicsPage/>} />
-            <Route path="/marvel-wiki-portal/comics/:comicsId" element={<ComicsDetails/>} />
+            <Route path="/marvel-wiki-portal/comics/:comicsId" element={<SingleComicsPage />} />
             <Route path="/marvel-wiki-portal/*" element={<NotFound />}/>
           </Routes>
         </main>
