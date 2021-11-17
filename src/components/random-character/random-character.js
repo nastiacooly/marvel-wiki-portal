@@ -1,8 +1,7 @@
 import {useState, useEffect} from 'react';
 
 import useMarvelAPIService from '../../services/marvel-api-service';
-import Spinner from '../spinner/spinner';
-import ErrorView from '../error-view/error-view';
+import useConditionalRender from '../../hooks/conditional-render';
 
 import '../../button.scss';
 import './random-character.scss';
@@ -44,29 +43,15 @@ const RandomCharacter = () => {
             .then(onCharacterLoaded);
     }
 
-    const getContent = () => {
-        /**
-         * Returns content for rendering
-         * depending on error and loaded status.
-         */
-        return (
-            error ? 
-                <ErrorView message={errorMessage} flex="row" /> 
-                : loaded ? 
-                    <CharacterView character={character}/> 
-                    : <Spinner/>
-        );
-    }
-
     /* Rendering */
-
-    const content = getContent();
+    const content = <CharacterView character={character}/>;
+    const contentView = useConditionalRender(error, errorMessage, loaded, content, false, "row");
 
     return (
         <section className="random-section">
 
             <div className="random-character">
-                {content}
+                {contentView}
             </div>
 
             <div className="random-choose">

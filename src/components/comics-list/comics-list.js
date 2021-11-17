@@ -1,12 +1,33 @@
 import {useState, useEffect} from 'react';
 
 import useMarvelAPIService from '../../services/marvel-api-service';
+import useConditionalRender from '../../hooks/conditional-render';
 
 import ComicsCard from '../comics-card/comics-card';
-import ErrorView from '../error-view/error-view';
-import Spinner from '../spinner/spinner';
 
 import './comics-list.scss';
+
+const mapToComicsCards = (comics) => {
+    /**
+     * Helper function for ComicsList component.
+     * Receives comics array and maps it to
+     * ComicsCard components.
+     */
+    if (!comics) {
+        return null;
+    }
+
+    /* Mapping comics to ComicsCard components */
+    return comics.map( ({id, title, price, thumbnail}, i) => {
+        return <ComicsCard 
+                    key={i} 
+                    id={id}
+                    title={title} 
+                    image={thumbnail}
+                    price={price}
+                />;
+    });
+}
 
 const ComicsList = () => {
     /* Initializing instances to communicate with Marvel API */
@@ -53,52 +74,14 @@ const ComicsList = () => {
             .then(onComicsLoaded);
     }
 
-    const renderComicsCards = (comics) => {
-        /**
-         * Returns comics cards elements
-         * with data about comics.
-         */
-        if (!comics) {
-            return null;
-        }
-
-        /* Mapping comics to ComicsCard components */
-        return comics.map( ({id, title, price, thumbnail}, i) => {
-            return <ComicsCard 
-                        key={i} 
-                        id={id}
-                        title={title} 
-                        image={thumbnail}
-                        price={price}
-                    />;
-        });
-    }
-
-    const getContent = () => {
-        /**
-         * Determines content for rendering
-         * depending on error and loaded status.
-         */
-        const comicsCards = renderComicsCards(comics);
-
-        /* Return content */
-        return (
-            error ? 
-                <ErrorView message={errorMessage} flex="column" /> 
-                : loaded ? 
-                    comicsCards 
-                    : (<> {comicsCards} <Spinner/> </>)
-        );
-    }
-
     /* Rendering */
-
-    const content = getContent();
+    const content = mapToComicsCards(comics);
+    const contentView = useConditionalRender(error, errorMessage, loaded, content, true, "column");
 
     return (
         <div className="comics-section">
             <ul className="comics-section__list">
-                {content}
+                {contentView}
             </ul>
 
             <button 

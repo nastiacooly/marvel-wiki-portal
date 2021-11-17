@@ -2,10 +2,9 @@ import {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 
 import useMarvelAPIService from '../../services/marvel-api-service';
+import useConditionalRender from '../../hooks/conditional-render';
 
 import CharacterCard from '../character-card/character-card';
-import ErrorView from '../error-view/error-view';
-import Spinner from '../spinner/spinner';
 
 import './characters-list.scss';
 
@@ -84,16 +83,12 @@ const CharactersList = (props) => {
 
     /* Rendering */
     const characterCards = mapToCharacterCards(characters, activeCharacterCard, onCharacterCardSelected);
+    const contentView = useConditionalRender(error, errorMessage, loaded, characterCards, true, "column");
 
     return (
         <div className="characters-section">
             <ul className="characters-section__list">
-                <GetContentView 
-                    characterCards={characterCards} 
-                    error={error} 
-                    errorMessage={errorMessage} 
-                    loaded={loaded}
-                />
+                {contentView}
             </ul>
 
             <button 
@@ -107,23 +102,6 @@ const CharactersList = (props) => {
         </div>
         
     );
-}
-
-
-const GetContentView = ({characterCards, error, errorMessage, loaded}) => {
-    /**
-     * Returns content for rendering
-     * depending on error and loaded status.
-     */
-    if (error) {
-        return <ErrorView message={errorMessage} flex="column" />;
-    }
-
-    if (loaded) {
-        return characterCards;
-    }
-
-    return <> {characterCards} <Spinner/> </>;
 }
 
 

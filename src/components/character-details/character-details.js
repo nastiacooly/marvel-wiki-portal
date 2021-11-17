@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import useMarvelAPIService from '../../services/marvel-api-service';
-import ErrorView from '../error-view/error-view';
-import Spinner from '../spinner/spinner';
+import useConditionalRender from '../../hooks/conditional-render';
 import Skeleton from '../skeleton/skeleton';
 
 import './character-details.scss';
@@ -74,9 +73,12 @@ const CharacterDetails = (props) => {
             .then(onCharacterComicsLoaded);
     }
 
+    const content = <CharacterDetailsView character={character}/>;
+    const contentView = useConditionalRender(error, errorMessage, loaded, content, false, "row");
+
     return (
         <div className="character-info" ref={characterInfoRef}>
-            <GetContentView error={error} errorMessage={errorMessage} loaded={loaded} data={character} />
+            {contentView}
             <ul className="character-info__comics">
                 <GetComicsContentView characterComics={characterComics} />
             </ul>
@@ -88,11 +90,11 @@ const CharacterDetails = (props) => {
 
 const CharacterDetailsView = ({character}) => {
     /**
-     * Returns element with character details.
-     * If no character chosen, returns default skeleton.
+     * Returns element with character details
+     * or default skeleton if no character chosen.
      */
     if (!character) {
-        return <Skeleton/>;
+        return <Skeleton />;
     }
 
     const {name, thumbnail, description, homepage, wiki} = character;
@@ -142,23 +144,6 @@ const CharacterComicsView = (props) => {
             </Link>
         </li>
     );
-}
-
-
-const GetContentView = ({error, errorMessage, loaded, data}) => {
-    /**
-     * Returns different content for rendering
-     * depending on error and loaded status.
-     */
-    if (error) {
-        return <ErrorView message={errorMessage} flex="row" />;
-    }
-
-    if (loaded) {
-        return <CharacterDetailsView character={data}/>;
-    }
-
-    return <Spinner />;
 }
 
 
