@@ -9,6 +9,32 @@ import Spinner from '../spinner/spinner';
 
 import './characters-list.scss';
 
+
+const mapToCharacterCards = (characters, activeCardId, onCharacterCardSelected) => {
+    /**
+     * Helper function for CharatersList component.
+     * Receives array with characters data
+     * and maps it to CharacterCard elements.
+     */
+    if (!characters) {
+        return null;
+    }
+
+    /* Mapping characters to CharacterCard components */
+    return characters.map( ({id, name, thumbnail}) => {
+        let active = id === activeCardId;
+        return <CharacterCard 
+                    key={id} 
+                    id={id}
+                    name={name} 
+                    image={thumbnail}
+                    onCharacterCardSelected={onCharacterCardSelected}
+                    active={active}
+                />;
+    });
+}
+
+
 const CharactersList = (props) => {
     const {onCharacterCardSelected, activeCharacterCard} = props;
     /* Initializing instances to communicate with Marvel API */
@@ -56,54 +82,18 @@ const CharactersList = (props) => {
             .then(onCharactersLoaded);
     }
 
-    const renderCharacterCards = (characters) => {
-        /**
-         * Returns character cards elements
-         * with data about characters.
-         */
-        if (!characters) {
-            return null;
-        }
-
-        /* Mapping characters to CharacterCard components */
-        return characters.map( ({id, name, thumbnail}) => {
-            let active = id === activeCharacterCard;
-            return <CharacterCard 
-                        key={id} 
-                        id={id}
-                        name={name} 
-                        image={thumbnail}
-                        onCharacterCardSelected={onCharacterCardSelected}
-                        active={active}
-                    />;
-        });
-    }
-
-    const getContent = () => {
-        /**
-         * Determines content for rendering
-         * depending on error and loaded status.
-         */
-        const characterCards = renderCharacterCards(characters);
-
-        /* Return content */
-        return (
-            error ? 
-                <ErrorView message={errorMessage} flex="column" /> 
-                : loaded ? 
-                    characterCards 
-                    : (<> {characterCards} <Spinner/> </>)
-        );
-    }
-
     /* Rendering */
-
-    const content = getContent();
+    const characterCards = mapToCharacterCards(characters, activeCharacterCard, onCharacterCardSelected);
 
     return (
         <div className="characters-section">
             <ul className="characters-section__list">
-                {content}
+                <GetContentView 
+                    characterCards={characterCards} 
+                    error={error} 
+                    errorMessage={errorMessage} 
+                    loaded={loaded}
+                />
             </ul>
 
             <button 
@@ -118,6 +108,24 @@ const CharactersList = (props) => {
         
     );
 }
+
+
+const GetContentView = ({characterCards, error, errorMessage, loaded}) => {
+    /**
+     * Returns content for rendering
+     * depending on error and loaded status.
+     */
+    if (error) {
+        return <ErrorView message={errorMessage} flex="column" />;
+    }
+
+    if (loaded) {
+        return characterCards;
+    }
+
+    return <> {characterCards} <Spinner/> </>;
+}
+
 
 CharactersList.propTypes = {
     activeCharacterCard: PropTypes.number,
