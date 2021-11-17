@@ -74,34 +74,11 @@ const CharacterDetails = (props) => {
             .then(onCharacterComicsLoaded);
     }
 
-    const getContent = () => {
-        /**
-         * Returns different content for rendering
-         * depending on error and loaded status.
-         */
-        return (
-            error ? 
-                <ErrorView message={errorMessage} flex="row" /> 
-                : loaded ? 
-                    <CharacterDetailsView character={character}/>
-                        : <Spinner/>
-        );
-    }
-
-    /* Rendering */
-    const content = getContent();
-
-    const comics = characterComics.map(({id, title, thumbnail}) => {
-        return <CharacterComicsView key={id} id={id} title={title} image={thumbnail}/>
-    });
-
-    const comicsContent = comics.length > 0 ? (<><h5>Comics:</h5> {comics}</>) : null;
-
     return (
         <div className="character-info" ref={characterInfoRef}>
-            {content}
+            <GetContentView error={error} errorMessage={errorMessage} loaded={loaded} data={character} />
             <ul className="character-info__comics">
-                {comicsContent}
+                <GetComicsContentView characterComics={characterComics} />
             </ul>
         </div>
     );
@@ -166,6 +143,45 @@ const CharacterComicsView = (props) => {
         </li>
     );
 }
+
+
+const GetContentView = ({error, errorMessage, loaded, data}) => {
+    /**
+     * Returns different content for rendering
+     * depending on error and loaded status.
+     */
+    if (error) {
+        return <ErrorView message={errorMessage} flex="row" />;
+    }
+
+    if (loaded) {
+        return <CharacterDetailsView character={data}/>;
+    }
+
+    return <Spinner />;
+}
+
+
+const GetComicsContentView = ({characterComics}) => {
+    /**
+     * Returns CharacterComicsView with comics
+     * or null in case of zero comics for a character.
+     */
+    if (!characterComics) {
+        return null;
+    }
+
+    const comics = characterComics.map(({id, title, thumbnail}) => {
+        return <CharacterComicsView key={id} id={id} title={title} image={thumbnail}/>
+    });
+
+    if (comics.length === 0) {
+        return null;
+    }
+
+    return <><h5>Comics:</h5> {comics}</>;
+}
+
 
 CharacterDetails.propTypes = {
     characterId: PropTypes.number
