@@ -2,7 +2,11 @@ import PropTypes from 'prop-types';
 
 import './error-view.scss';
 
-const ErrorView = ({message, flex}) => {
+const ErrorView = ({error, errorMessage, flex}) => {
+    if (!error) {
+        return null;
+    }
+
     let className;
     switch(flex) {
         case "column":
@@ -18,7 +22,7 @@ const ErrorView = ({message, flex}) => {
     return (
         <div className={className}>
             <ErrorIcon />
-            <p className="error-view__message">{message}</p>
+            <p className="error-view__message">{errorMessage}</p>
         </div>
     );
 }
@@ -57,12 +61,14 @@ const ErrorIcon = () => {
 }
 
 ErrorView.propTypes = {
-    message: PropTypes.string.isRequired,
+    error: PropTypes.bool.isRequired,
+    errorMessage: PropTypes.string.isRequired,
     flex: PropTypes.oneOf(['column', 'row'])
 }
 
 ErrorView.defaultProps = {
-    message: "Something went wrong"
+    error: true,
+    errorMessage: "Something went wrong. Please try again later"
 }
 
 export default ErrorView;

@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import useMarvelAPIService from '../../services/marvel-api-service';
-import useConditionalRender from '../../hooks/conditional-render';
+
+import ErrorView from '../error-view/error-view';
+import Spinner from '../spinner/spinner';
 
 import './comics-details.scss';
 
@@ -39,11 +41,11 @@ const ComicsDetails = (props) => {
             .then(onComicsLoaded);
     }
 
-    /* Rendering */
-    const content = <ComicsDetailsView comics={comics}/>;
-    const contentView = useConditionalRender(error, errorMessage, loaded, content);
-
-    return (<>{contentView}</>);
+    return (<>
+                <ComicsDetailsView comics={comics}/>
+                <Spinner loaded={loaded}/>
+                <ErrorView error={error} errorMessage={errorMessage}/>
+            </>);
 }
 
 

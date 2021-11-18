@@ -2,9 +2,10 @@ import {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 
 import useMarvelAPIService from '../../services/marvel-api-service';
-import useConditionalRender from '../../hooks/conditional-render';
 
 import CharacterCard from '../character-card/character-card';
+import ErrorView from '../error-view/error-view';
+import Spinner from '../spinner/spinner';
 
 import './characters-list.scss';
 
@@ -83,12 +84,13 @@ const CharactersList = (props) => {
 
     /* Rendering */
     const characterCards = mapToCharacterCards(characters, activeCharacterCard, onCharacterCardSelected);
-    const contentView = useConditionalRender(error, errorMessage, loaded, characterCards, true, "column");
 
     return (
         <div className="characters-section">
             <ul className="characters-section__list">
-                {contentView}
+                {characterCards}
+                <Spinner loaded={loaded}/>
+                <ErrorView error={error} errorMessage={errorMessage} flex="column"/>
             </ul>
 
             <button 

@@ -1,7 +1,9 @@
 import {useState, useEffect} from 'react';
 
 import useMarvelAPIService from '../../services/marvel-api-service';
-import useConditionalRender from '../../hooks/conditional-render';
+
+import ErrorView from '../error-view/error-view';
+import Spinner from '../spinner/spinner';
 
 import '../../button.scss';
 import './random-character.scss';
@@ -11,7 +13,7 @@ const RandomCharacter = () => {
     const {loaded, error, errorMessage, getCharacter, clearError} = useMarvelAPIService();
 
     /* Component states */
-    const [character, setCharacter] = useState({});
+    const [character, setCharacter] = useState(null);
 
     /* Component logic */
 
@@ -34,6 +36,7 @@ const RandomCharacter = () => {
          * and saves it to the state of this component.
          */
         clearError();
+        setCharacter(null);
 
         const maxId = 1011400;
         const minId = 1011000;
@@ -43,15 +46,13 @@ const RandomCharacter = () => {
             .then(onCharacterLoaded);
     }
 
-    /* Rendering */
-    const content = <CharacterView character={character}/>;
-    const contentView = useConditionalRender(error, errorMessage, loaded, content, false, "row");
-
     return (
         <section className="random-section">
 
             <div className="random-character">
-                {contentView}
+                <CharacterView character={character}/>
+                <Spinner loaded={loaded}/>
+                <ErrorView error={error} errorMessage={errorMessage} flex="row"/>
             </div>
 
             <div className="random-choose">
@@ -77,6 +78,10 @@ const RandomCharacter = () => {
 
 
 const CharacterView = ({character}) => {
+    if (!character) {
+        return null;
+    }
+
     const {name, thumbnail, description, homepage, wiki} = character;
 
     /* Change styles for a "not found" image */

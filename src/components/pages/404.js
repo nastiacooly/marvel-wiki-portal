@@ -5,7 +5,7 @@ import ErrorView from '../error-view/error-view';
 const NotFoundPage = () => {
     return (
         <div>
-            <ErrorView message="404 Page Not Found" />
+            <ErrorView errorMessage="404 Page Not Found" />
             <Link to="/marvel-wiki-portal/" className="app-button app-button_main app-button_wide">Back to Main Page</Link>
         </div>
     );

@@ -1,9 +1,10 @@
 import {useState, useEffect} from 'react';
 
 import useMarvelAPIService from '../../services/marvel-api-service';
-import useConditionalRender from '../../hooks/conditional-render';
 
 import ComicsCard from '../comics-card/comics-card';
+import ErrorView from '../error-view/error-view';
+import Spinner from '../spinner/spinner';
 
 import './comics-list.scss';
 
@@ -76,12 +77,13 @@ const ComicsList = () => {
 
     /* Rendering */
     const content = mapToComicsCards(comics);
-    const contentView = useConditionalRender(error, errorMessage, loaded, content, true, "column");
 
     return (
         <div className="comics-section">
             <ul className="comics-section__list">
-                {contentView}
+                {content}
+                <Spinner loaded={loaded}/>
+                <ErrorView error={error} errorMessage={errorMessage} flex="column"/>
             </ul>
 
             <button 

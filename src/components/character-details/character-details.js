@@ -3,10 +3,13 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import useMarvelAPIService from '../../services/marvel-api-service';
-import useConditionalRender from '../../hooks/conditional-render';
+
+import ErrorView from '../error-view/error-view';
+import Spinner from '../spinner/spinner';
 import Skeleton from '../skeleton/skeleton';
 
 import './character-details.scss';
+
 
 const CharacterDetails = (props) => {
     const {characterId} = props;
@@ -65,7 +68,7 @@ const CharacterDetails = (props) => {
         }
         
         clearError();
-        setCharacter(null);
+        setCharacter({});
         setCharacterComics([]);
         getCharacter(id)
             .then(onCharacterLoaded)
@@ -73,14 +76,13 @@ const CharacterDetails = (props) => {
             .then(onCharacterComicsLoaded);
     }
 
-    const content = <CharacterDetailsView character={character}/>;
-    const contentView = useConditionalRender(error, errorMessage, loaded, content, false, "row");
-
     return (
         <div className="character-info" ref={characterInfoRef}>
-            {contentView}
+            <CharacterDetailsView character={character} />
+            <Spinner loaded={loaded}/>
+            <ErrorView error={error} errorMessage={errorMessage} flex="row"/>
             <ul className="character-info__comics">
-                <GetComicsContentView characterComics={characterComics} />
+                <CharacterComicsView characterComics={characterComics}/>
             </ul>
         </div>
     );
@@ -91,10 +93,15 @@ const CharacterDetails = (props) => {
 const CharacterDetailsView = ({character}) => {
     /**
      * Returns element with character details
-     * or default skeleton if no character chosen.
-     */
+     * or default skeleton on first render
+     * or null while character's data is empty (while loading).
+     */    
     if (!character) {
         return <Skeleton />;
+    }
+
+    if (Object.keys(character).length === 0) {
+        return null;
     }
 
     const {name, thumbnail, description, homepage, wiki} = character;
@@ -131,38 +138,23 @@ const CharacterDetailsView = ({character}) => {
 }
 
 
-const CharacterComicsView = (props) => {
-    const {id, title, image} = props;
-
-    return (
-        <li className="character-info__single-comics">
-            <Link to={`/marvel-wiki-portal/comics/${id}`} className="character-info__single-comics_on-hover">
-                <h6>{title}</h6>
-                <div>
-                    <img src={image} alt={`Cover of ${title} comics`}/>
-                </div>
-            </Link>
-        </li>
-    );
-}
-
-
-const GetComicsContentView = ({characterComics}) => {
-    /**
-     * Returns CharacterComicsView with comics
-     * or null in case of zero comics for a character.
-     */
-    if (!characterComics) {
+const CharacterComicsView = ({characterComics}) => {
+    if (!characterComics || characterComics.length === 0) {
         return null;
     }
 
     const comics = characterComics.map(({id, title, thumbnail}) => {
-        return <CharacterComicsView key={id} id={id} title={title} image={thumbnail}/>
+        return (
+            <li key={id} className="character-info__single-comics">
+                <Link to={`/marvel-wiki-portal/comics/${id}`} className="character-info__single-comics_on-hover">
+                    <h6>{title}</h6>
+                    <div>
+                        <img src={thumbnail} alt={`Cover of ${title} comics`}/>
+                    </div>
+                </Link>
+            </li>
+        );
     });
-
-    if (comics.length === 0) {
-        return null;
-    }
 
     return <><h5>Comics:</h5> {comics}</>;
 }
