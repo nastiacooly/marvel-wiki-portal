@@ -59,6 +59,22 @@ const useMarvelAPIService = (initialLoadedState = false) => {
         return _transformCharacterData(characterMainData);
     }
 
+    const getCharacterByName = async (name) => {
+        /**
+         * Fetches data from Marvel API
+         * on a character by their name.
+         * Returns JS-object with transformed data.
+         */
+        const response = await request(
+            _apiUrls.allCharacters 
+            + `?name=${name}&` 
+            + _apiKeyBase 
+            + publicApiKey
+            );
+        const characterMainData = response.data.results[0];
+        return _transformCharacterData(characterMainData);
+    }
+
     const getAllComics = async (offset = 0) => {
         /**
          * Fetches data from Marvel API
@@ -175,7 +191,8 @@ const useMarvelAPIService = (initialLoadedState = false) => {
         getCharacter,
         getAllComics,
         getSingleComics,
-        getCharacterComics
+        getCharacterComics,
+        getCharacterByName
         };
 }
 
