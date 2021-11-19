@@ -67,7 +67,8 @@ const useMarvelAPIService = (initialLoadedState = false) => {
          */
         const response = await request(
             _apiUrls.allCharacters 
-            + `?name=${name}&` 
+            + `name=${name}` 
+            + "&"
             + _apiKeyBase 
             + publicApiKey
             );

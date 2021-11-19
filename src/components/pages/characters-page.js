@@ -3,6 +3,7 @@ import { useState } from 'react';
 import RandomCharacter from '../random-character/random-character';
 import CharactersList from '../characters-list/characters-list';
 import CharacterDetails from '../character-details/character-details';
+import CharacterSearchForm from '../character-search-form/character-search-form';
 import ErrorBoundary from '../error-boundary/error-boundary';
 
 import vision from '../../static/img/bottom_bg.png';
@@ -28,9 +29,16 @@ const CharactersPage = () => {
                     />
                 </ErrorBoundary>
                 
-                <ErrorBoundary>
-                    <CharacterDetails characterId={activeCharacterCard}/>
-                </ErrorBoundary>
+                <div>
+                    <ErrorBoundary>
+                        <CharacterDetails characterId={activeCharacterCard}/>
+                    </ErrorBoundary>
+
+                    
+                        <CharacterSearchForm />
+                    
+                </div>
+                
             </div>
 
             <div className="bg-decoration">
