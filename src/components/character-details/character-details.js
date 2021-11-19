@@ -100,7 +100,8 @@ const CharacterDetailsView = ({character}) => {
         return <Skeleton />;
     }
 
-    if (Object.keys(character).length === 0) {
+    let characterIsEmpty = Object.keys(character).length === 0;
+    if (characterIsEmpty) {
         return null;
     }
 
