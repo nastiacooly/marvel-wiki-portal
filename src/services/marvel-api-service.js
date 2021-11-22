@@ -143,7 +143,7 @@ const useMarvelAPIService = (initialLoadedState = false) => {
         /* Validation of character description */
         const noDescriptionMessage = `
             Please visit Homepage or Wiki for detailed description of ${character.name}
-            `;
+        `;
         let description = character.description || noDescriptionMessage;
 
         if (description.length >= 235) {

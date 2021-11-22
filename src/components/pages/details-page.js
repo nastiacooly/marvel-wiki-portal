@@ -1,20 +1,20 @@
 import { useParams } from 'react-router-dom';
 
 import AppBanner from '../app-banner/app-banner';
-import CharacterFound from '../character-found/character-found';
+import DetailedView from '../detailed-view/detailed-view';
 import ErrorBoundary from '../error-boundary/error-boundary';
 
-const SingleCharacterPage = () => {
-    let { characterId } = useParams();
+const DetailsPage = () => {
+    let { id, type } = useParams();
 
     return (
         <>
             <AppBanner/>
             <ErrorBoundary>
-                <CharacterFound characterId={characterId} />
+                <DetailedView id={id} type={type} />
             </ErrorBoundary>
         </>
     );
 }
 
-export default SingleCharacterPage;
+export default DetailsPage;
