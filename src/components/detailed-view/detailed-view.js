@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import useMarvelAPIService from '../../services/marvel-api-service';
@@ -25,7 +26,7 @@ const DetailedView = (props) => {
 
     const onItemLoaded = (item) => {
         /**
-         * Saves comics data to state
+         * Saves comics/character data to state
          * of this component.
          */
         setItem(item);
@@ -33,7 +34,7 @@ const DetailedView = (props) => {
 
     const getItemDetails = (id) => {
         /**
-         * Gets data (object) from Marvel API on selected comics
+         * Gets data (object) from Marvel API on comics/character
          * and saves it to the state of this component.
          */
         clearError();
@@ -47,7 +48,6 @@ const DetailedView = (props) => {
             getCharacter(id)
             .then(onItemLoaded);
         }
-        
     }
 
     return (<>
@@ -60,8 +60,8 @@ const DetailedView = (props) => {
 
 const ItemDetailsView = ({item, type}) => {
     /**
-     * Returns element with comics details.
-     * If no comics chosen, returns null.
+     * Returns element with comics/character details.
+     * If no comics/character chosen, returns null.
      */
     if (!item) {
         return null;
@@ -90,6 +90,7 @@ const ItemDetailsView = ({item, type}) => {
                 <article className={`${baseClassName}__description`}>
                     {description}
                 </article>
+
                 {
                     type === "comics" ?
                     <>
@@ -111,10 +112,19 @@ const ItemDetailsView = ({item, type}) => {
             </div>
 
             <div className={`${baseClassName}__links`}>
-                <Link to={type === "comics" ? '/marvel-wiki-portal/comics' : '/marvel-wiki-portal/'} className={`${baseClassName}__link`}>Back to all</Link>
+                <Link 
+                    to={type === "comics" ? '/marvel-wiki-portal/comics' : '/marvel-wiki-portal/characters'} 
+                    className={`${baseClassName}__link`}>
+                        Back to all
+                </Link>
             </div>
         </div>
     );
+}
+
+DetailedView.propTypes = {
+    id: PropTypes.number.isRequired,
+    type: PropTypes.oneOf(['comics', 'characters'])
 }
 
 export default DetailedView;
