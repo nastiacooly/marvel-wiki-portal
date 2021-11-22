@@ -29,14 +29,14 @@ const CharactersPage = () => {
                     />
                 </ErrorBoundary>
                 
-                <div>
+                <div className="character-details-container">
                     <ErrorBoundary>
                         <CharacterDetails characterId={activeCharacterCard}/>
                     </ErrorBoundary>
 
-                    
+                    <ErrorBoundary>
                         <CharacterSearchForm />
-                    
+                    </ErrorBoundary>
                 </div>
                 
             </div>

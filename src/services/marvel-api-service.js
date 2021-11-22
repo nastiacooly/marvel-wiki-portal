@@ -136,6 +136,9 @@ const useMarvelAPIService = (initialLoadedState = false) => {
          * Receives character data object (formed by Marvel API) 
          * and returns object with transformed character data 
          */
+        if (!character) {
+            return null;
+        }
 
         /* Validation of character description */
         const noDescriptionMessage = `
@@ -171,7 +174,7 @@ const useMarvelAPIService = (initialLoadedState = false) => {
 
         return {
             id: comics.id,
-            title: comics.title,
+            name: comics.title,
             description: comics.description || 'No description available',
             price: price,
             thumbnail: comics.thumbnail.path + "." + comics.thumbnail.extension,

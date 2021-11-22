@@ -19,11 +19,11 @@ const mapToComicsCards = (comics) => {
     }
 
     /* Mapping comics to ComicsCard components */
-    return comics.map( ({id, title, price, thumbnail}, i) => {
+    return comics.map( ({id, name, price, thumbnail}, i) => {
         return <ComicsCard 
                     key={i} 
                     id={id}
-                    title={title} 
+                    name={name} 
                     image={thumbnail}
                     price={price}
                 />;

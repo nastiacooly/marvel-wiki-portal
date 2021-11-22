@@ -144,13 +144,13 @@ const CharacterComicsView = ({characterComics}) => {
         return null;
     }
 
-    const comics = characterComics.map(({id, title, thumbnail}) => {
+    const comics = characterComics.map(({id, name, thumbnail}) => {
         return (
             <li key={id} className="character-info__single-comics">
                 <Link to={`/marvel-wiki-portal/comics/${id}`} className="character-info__single-comics_on-hover">
-                    <h6>{title}</h6>
+                    <h6>{name}</h6>
                     <div>
-                        <img src={thumbnail} alt={`Cover of ${title} comics`}/>
+                        <img src={thumbnail} alt={`Cover of ${name} comics`}/>
                     </div>
                 </Link>
             </li>

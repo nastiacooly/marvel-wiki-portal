@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './comics-card.scss';
 
 const ComicsCard = (props) => {
-    const {id, title, price, image} = props;
+    const {id, name, price, image} = props;
 
     /* Change styles for a "not found" image */
     const imageNotFound = "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg";
@@ -20,11 +20,11 @@ const ComicsCard = (props) => {
         >
             <Link to={`/marvel-wiki-portal/comics/${id}`}>
                 <div className={imageClassNames}>
-                    <img src={image} alt={`Cover of ${title} comics`} />
+                    <img src={image} alt={`Cover of ${name} comics`} />
                 </div>
 
                 <div className="comics-card__details">
-                    <h3 className="comics-card__title">{title}</h3>
+                    <h3 className="comics-card__title">{name}</h3>
                     <span className="comics-card__price">{price}</span>
                 </div>
             </Link>

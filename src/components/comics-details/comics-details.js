@@ -58,7 +58,7 @@ const ComicsDetailsView = ({comics}) => {
         return null;
     }
 
-    const {title, thumbnail, pages, price, description, language} = comics;
+    const {name, thumbnail, pages, price, description, language} = comics;
 
     /* Change styles for a "not found" image */
     const imageNotFound = "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg";
@@ -70,11 +70,11 @@ const ComicsDetailsView = ({comics}) => {
     return (
         <div className="comics-info">
             <div className={imageClassNames}>
-                <img src={thumbnail} alt={`Cover of ${title} comics`}/>
+                <img src={thumbnail} alt={`Cover of ${name} comics`}/>
             </div>
 
             <div className="comics-info__main">
-                <h3 className="comics-info__title">{title}</h3>
+                <h3 className="comics-info__title">{name}</h3>
 
                 <article className="comics-info__description">
                     {description}

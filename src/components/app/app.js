@@ -19,6 +19,7 @@ const NotFoundPage = lazy(() => import('../pages/404'));
 const CharactersPage = lazy(() => import('../pages/characters-page'));
 const ComicsPage = lazy(() => import('../pages/comics-page'));
 const SingleComicsPage = lazy(() => import('../pages/single-comics-page'));
+const SingleCharacterPage = lazy(() => import('../pages/single-character-page'));
 
 const App = () => {
 
@@ -30,6 +31,7 @@ const App = () => {
           <Suspense fallback={<Spinner />}>
             <Routes>
               <Route path="/marvel-wiki-portal" element={<CharactersPage/>} />
+              <Route path="/marvel-wiki-portal/characters/:characterId" element={<SingleCharacterPage />} />
               <Route path="/marvel-wiki-portal/comics" element={<ComicsPage/>} />
               <Route path="/marvel-wiki-portal/comics/:comicsId" element={<SingleComicsPage />} />
               <Route path="/marvel-wiki-portal/*" element={<NotFoundPage />}/>

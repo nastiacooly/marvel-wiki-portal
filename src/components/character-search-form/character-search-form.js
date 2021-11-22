@@ -5,12 +5,15 @@ import {useState} from 'react';
 
 import useMarvelAPIService from '../../services/marvel-api-service';
 
+import Spinner from '../spinner/spinner';
+import ErrorView from '../error-view/error-view';
+
 import './character-search-form.scss';
 
 const CharacterSearchForm = () => {
-    const {getCharacterByName, clearError} = useMarvelAPIService();
+    const {loaded, error, getCharacterByName, clearError} = useMarvelAPIService(true);
 
-    const [character, setCharacter] = useState(null);
+    const [character, setCharacter] = useState({});
 
     const onCharacterFound = (character) => {
         /**
@@ -39,20 +42,36 @@ const CharacterSearchForm = () => {
                 initialValues={{name: ""}}
                 validationSchema={yup.object({
                     name: yup.string()
-                            .required('Обязательное поле!'),
+                            .required('This field is required'),
                 })}
                 onSubmit={values => getCharacterData(values.name)}>
-                <Form>
-                    <h5>Or find a character by name:</h5>
-                    <Field 
-                        id="name"
-                        name="name"
-                        type="text"
-                        placeholder="Enter name"
-                    />
-                    <ErrorMessage name="name" component="div"/>
-                    <button type="submit" className="app-button app-button_main">Find</button>
-                    {character?.id ? <a href={`/characters/${character.id}` } className="app-button">To Page</a> : null}
+                <Form className="form">
+                    <h5 className="form__header">Or find a character by name:</h5>
+                    <div className="form__main">
+                        
+                        <Field 
+                            id="name"
+                            name="name"
+                            type="text"
+                            placeholder="Enter name"
+                            className="form__input"
+                        />
+                        <button type="submit" className="app-button app-button_main">Find</button>
+                        
+                    </div>
+                    
+                    <div className="form__result">
+                        <ErrorMessage name="name" component="div" className="form__error"/>
+                        {!character ? <div className="form__error">The character was not found. Please, check the name and try again.</div> : null}
+                        {character?.id ? 
+                            <>
+                                <div className="form__success">Found! Click to visit {character.name}'s page.</div>
+                                <a href={`/marvel-wiki-portal/characters/${character.id}`} className="app-button">To Page</a>
+                            </> : 
+                                null}
+                    </div>
+                    <Spinner loaded={loaded}/>
+                    <ErrorView error={error}/>
                 </Form>
             </Formik>
         </>
