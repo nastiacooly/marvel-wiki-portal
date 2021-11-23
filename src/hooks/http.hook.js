@@ -1,20 +1,15 @@
 import {useState, useCallback} from 'react';
 
-const useHttp = (initialLoadedState = false) => {
+const useHttp = () => {
     /**
      * Custom hook for http-requests.
-     * Returns method to get data from url and to set corresponding 'loaded' and 'error' states.
+     * Returns method to get data from url and to set corresponding 'process' state.
      * Also returns state values and clearError method.
      */
-    const [loaded, setLoaded] = useState(initialLoadedState);
-    const [error, setError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
-    const [newItemsLoading, setNewItemsLoading] = useState(false);
+    const [process, setProcess] = useState('idle');
     
     const request = useCallback( async (url, method="GET", body=null, headers={'Content-type': 'application/json'}) => {
-        setLoaded(false);
-        setError(false);
-        setNewItemsLoading(true);
+        setProcess('loading');
 
         try {
             const response = await fetch(url, {method, body, headers});
@@ -24,28 +19,25 @@ const useHttp = (initialLoadedState = false) => {
             }
 
             const data = await response.json();
-
-            setLoaded(true);
-            setError(false);
-            setNewItemsLoading(false);
             return data;
 
         } catch(e) {
-            setLoaded(true);
-            setError(true);
-            setNewItemsLoading(false);
-            setErrorMessage("Something went wrong. Please try again later.");
+            setProcess('failure');
             throw(e);
         }
 
     }, []);
 
     const clearError = useCallback(() => {
-        setError(false);
-        setErrorMessage('');
+        setProcess('loading');
     }, []);
 
-    return {loaded, error, errorMessage, newItemsLoading, request, clearError};
+    return {
+            process, 
+            setProcess,
+            request, 
+            clearError
+        };
 
 }
 

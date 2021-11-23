@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 
 import './error-view.scss';
 
-const ErrorView = ({error, errorMessage, flex}) => {
-    if (!error) {
+const ErrorView = ({process, errorMessage, flex}) => {
+    if (process !== "failure") {
         return null;
     }
 
@@ -61,13 +61,13 @@ const ErrorIcon = () => {
 }
 
 ErrorView.propTypes = {
-    error: PropTypes.bool.isRequired,
-    errorMessage: PropTypes.string.isRequired,
+    process: PropTypes.string,
+    errorMessage: PropTypes.string,
     flex: PropTypes.oneOf(['column', 'row'])
 }
 
 ErrorView.defaultProps = {
-    error: true,
+    process: "failure",
     errorMessage: "Something went wrong. Please try again later"
 }
 

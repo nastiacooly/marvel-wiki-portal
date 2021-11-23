@@ -2,14 +2,14 @@ import useHttp from '../hooks/http.hook';
 
 import publicApiKey from './api-key';
 
-const useMarvelAPIService = (initialLoadedState = false) => {
+const useMarvelAPIService = () => {
     /**
      * Custom hook to work with Marvel API.
      * Returns methods for getting characters
      * and returns corresponding state values.
      * Based on custom 'useHttp' hook.
      */
-    const {loaded, error, errorMessage, request, clearError} = useHttp(initialLoadedState);
+    const {process, request, clearError, setProcess} = useHttp();
 
     const _apiBase = "https://gateway.marvel.com:443/v1/public";
     const _apiKeyBase = "apikey=";
@@ -183,9 +183,8 @@ const useMarvelAPIService = (initialLoadedState = false) => {
         _baseCharactersLimit,
         _baseCharactersOffset,
         _baseComicsLimit,
-        loaded, 
-        error, 
-        errorMessage, 
+        process,
+        setProcess,
         clearError, 
         getAllCharacters, 
         getCharacter,

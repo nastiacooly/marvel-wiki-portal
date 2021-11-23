@@ -1,7 +1,7 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 
 import useMarvelAPIService from '../../services/marvel-api-service';
 
@@ -11,9 +11,13 @@ import ErrorView from '../error-view/error-view';
 import './character-search-form.scss';
 
 const CharacterSearchForm = () => {
-    const {loaded, error, getCharacterByName, clearError} = useMarvelAPIService(true);
+    const {process, setProcess, getCharacterByName, clearError} = useMarvelAPIService();
 
     const [character, setCharacter] = useState({});
+
+    useEffect(() => {
+        setProcess('success');
+    }, []);
 
     const onCharacterFound = (character) => {
         /**
@@ -33,7 +37,8 @@ const CharacterSearchForm = () => {
         setCharacter({});
 
         getCharacterByName(name)
-        .then(onCharacterFound);
+        .then(onCharacterFound)
+        .then(() => setProcess('success'));
     }
 
     return (
@@ -56,7 +61,13 @@ const CharacterSearchForm = () => {
                             placeholder="Enter name"
                             className="form__input"
                         />
-                        <button type="submit" className="app-button app-button_main">Find</button>
+                        <button 
+                            type="submit" 
+                            className="app-button app-button_main"
+                            disabled={process === "loading"}
+                            >
+                                Find
+                        </button>
                         
                     </div>
                     
@@ -76,8 +87,8 @@ const CharacterSearchForm = () => {
                                 : null
                         }
                     </div>
-                    <Spinner loaded={loaded}/>
-                    <ErrorView error={error}/>
+                    <Spinner process={process}/>
+                    <ErrorView process={process}/>
                 </Form>
             </Formik>
         </>

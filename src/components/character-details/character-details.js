@@ -3,10 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import useMarvelAPIService from '../../services/marvel-api-service';
-
-import ErrorView from '../error-view/error-view';
-import Spinner from '../spinner/spinner';
-import Skeleton from '../skeleton/skeleton';
+import setContent from '../../utils/setContent';
 
 import './character-details.scss';
 
@@ -17,8 +14,8 @@ const CharacterDetails = (props) => {
     /* Ref for correct scrolling to character details component */
     const characterInfoRef = useRef(null);
 
-    /* Initializing instances to communicate with Marvel API and work with 'loaded' and 'error' states */
-    const {loaded, error, errorMessage, getCharacter, getCharacterComics, clearError} = useMarvelAPIService(true);
+    /* Initializing instances to communicate with Marvel API and work with its states */
+    const {process, setProcess, getCharacter, getCharacterComics, clearError} = useMarvelAPIService();
 
     /* Component states */
     const [character, setCharacter] = useState(null);
@@ -66,24 +63,22 @@ const CharacterDetails = (props) => {
         if (!id) {
             return;
         }
-        
+
         clearError();
-        setCharacter({});
+        setCharacter(null);
         setCharacterComics([]);
         getCharacter(id)
             .then(onCharacterLoaded)
             .then(() => getCharacterComics(id))
-            .then(onCharacterComicsLoaded);
+            .then(onCharacterComicsLoaded)
+            .then(() => setProcess('success'));
     }
+
+    const content = setContent(process, character, CharacterDetailsWholeView, characterComics);
 
     return (
         <div className="character-info" ref={characterInfoRef}>
-            <CharacterDetailsView character={character} />
-            <Spinner loaded={loaded}/>
-            <ErrorView error={error} errorMessage={errorMessage} flex="row"/>
-            <ul className="character-info__comics">
-                <CharacterComicsView characterComics={characterComics}/>
-            </ul>
+            {content}
         </div>
     );
 
@@ -93,15 +88,9 @@ const CharacterDetails = (props) => {
 const CharacterDetailsView = ({character}) => {
     /**
      * Returns element with character details
-     * or default skeleton on first render
-     * or null while character's data is empty (while loading).
+     * or null.
      */    
     if (!character) {
-        return <Skeleton />;
-    }
-
-    let characterIsEmpty = Object.keys(character).length === 0;
-    if (characterIsEmpty) {
         return null;
     }
 
@@ -158,6 +147,18 @@ const CharacterComicsView = ({characterComics}) => {
     });
 
     return <><h5>Comics:</h5> {comics}</>;
+}
+
+
+const CharacterDetailsWholeView = ({character, characterComics}) => {
+    return (
+        <>
+            <CharacterDetailsView character={character} />
+            <ul className="character-info__comics">
+                <CharacterComicsView characterComics={characterComics}/>
+            </ul>
+        </>
+    );
 }
 
 

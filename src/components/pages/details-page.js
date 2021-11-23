@@ -11,7 +11,7 @@ const DetailsPage = () => {
         <>
             <AppBanner/>
             <ErrorBoundary>
-                <DetailedView id={id} type={type} />
+                <DetailedView id={+id} type={type} />
             </ErrorBoundary>
         </>
     );
