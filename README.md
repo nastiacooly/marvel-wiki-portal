@@ -15,6 +15,7 @@ This is my SPA for practicing React skills.
 Marvel Wiki Portal provides the following features:
 - Learning more about random Marvel character and getting links to their homepage and wiki;
 - Learning more about all characters by loading and clicking their cards;
+- Learning more about specific character by searching them by their name;
 - Learning more about comics mentioning specific character by clicking on a comic title at character's info;
 - Learning more about all comics by loading and clicking their cards.
 
