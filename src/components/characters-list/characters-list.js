@@ -2,10 +2,9 @@ import {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 
 import useMarvelAPIService from '../../services/marvel-api-service';
+import { setListContent } from '../../utils/setContent';
 
 import CharacterCard from '../character-card/character-card';
-import ErrorView from '../error-view/error-view';
-import Spinner from '../spinner/spinner';
 
 import './characters-list.scss';
 
@@ -41,7 +40,7 @@ const CharactersList = (props) => {
     const marvelService = useMarvelAPIService();
     const baseOffset = marvelService._baseCharactersOffset;
     const charactersPerLoad = marvelService._baseCharactersLimit;
-    const {loaded, error, errorMessage, newItemsLoading, clearError, getAllCharacters} = marvelService;
+    const {process, setProcess, clearError, getAllCharacters} = marvelService;
     /* Component states */
     const [characters, setCharacters] = useState([]);
     const [charactersEnded, setCharactersEnded] = useState(false);
@@ -79,23 +78,22 @@ const CharactersList = (props) => {
         clearError();
 
         getAllCharacters(offset)
-            .then(onCharactersLoaded);
+            .then(onCharactersLoaded)
+            .then(() => setProcess('success'));
     }
 
     /* Rendering */
-    const characterCards = mapToCharacterCards(characters, activeCharacterCard, onCharacterCardSelected);
+    const content = setListContent(process, () => mapToCharacterCards(characters, activeCharacterCard, onCharacterCardSelected));
 
     return (
         <div className="characters-section">
             <ul className="characters-section__list">
-                {characterCards}
-                <Spinner loaded={loaded}/>
-                <ErrorView error={error} errorMessage={errorMessage} flex="column"/>
+                {content}
             </ul>
 
             <button 
                 className="app-button app-button_main app-button_wide"
-                disabled={newItemsLoading}
+                disabled={process === "loading"}
                 style={{'display': charactersEnded ? 'none' : 'block'}}
                 onClick={() => onLoadCharacters(offset)}
                 >

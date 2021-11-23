@@ -1,12 +1,12 @@
 import {useState, useEffect} from 'react';
 
 import useMarvelAPIService from '../../services/marvel-api-service';
+import { setListContent } from '../../utils/setContent';
 
 import ComicsCard from '../comics-card/comics-card';
-import ErrorView from '../error-view/error-view';
-import Spinner from '../spinner/spinner';
 
 import './comics-list.scss';
+
 
 const mapToComicsCards = (comics) => {
     /**
@@ -34,7 +34,7 @@ const ComicsList = () => {
     /* Initializing instances to communicate with Marvel API */
     const marvelService = useMarvelAPIService();
     const comicsPerLoad = marvelService._baseComicsLimit;
-    const {loaded, error, errorMessage, newItemsLoading, clearError, getAllComics} = marvelService;
+    const {process, setProcess, clearError, getAllComics} = marvelService;
     /* Component states */
     const [comics, setComics] = useState([]);
     const [comicsEnded, setComicsEnded] = useState(false);
@@ -72,23 +72,22 @@ const ComicsList = () => {
         clearError();
 
         getAllComics(offset)
-            .then(onComicsLoaded);
+            .then(onComicsLoaded)
+            .then(() => setProcess('success'));
     }
 
     /* Rendering */
-    const content = mapToComicsCards(comics);
+    const content = setListContent(process, () => mapToComicsCards(comics));
 
     return (
         <div className="comics-section">
             <ul className="comics-section__list">
                 {content}
-                <Spinner loaded={loaded}/>
-                <ErrorView error={error} errorMessage={errorMessage} flex="column"/>
             </ul>
 
             <button 
                 className="app-button app-button_main app-button_wide"
-                disabled={newItemsLoading}
+                disabled={process === "loading"}
                 style={{'display': comicsEnded ? 'none' : 'block'}}
                 onClick={() => onLoadComics(offset)}
                 >

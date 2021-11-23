@@ -15,7 +15,7 @@ const DetailedView = (props) => {
     const {id, type} = props;
 
     /* Initializing instances to communicate with Marvel API and work with 'loaded' and 'error' states */
-    const {loaded, error, errorMessage, getCharacter, getSingleComics, clearError} = useMarvelAPIService();
+    const {process, setProcess, getCharacter, getSingleComics, clearError} = useMarvelAPIService();
 
     /* Component states */
     const [item, setItem] = useState(null);
@@ -42,19 +42,36 @@ const DetailedView = (props) => {
 
         if (type === "comics") {
             getSingleComics(id)
-            .then(onItemLoaded);
+            .then(onItemLoaded)
+            .then(() => setProcess('success'));
         }
 
         if (type === "characters") {
             getCharacter(id)
-            .then(onItemLoaded);
+            .then(onItemLoaded)
+            .then(() => setProcess('success'));
         }
     }
 
+    const setContent = (process, Component, item) => {
+        switch (process) {
+            case 'idle':
+                return <Spinner />;
+            case 'loading':
+                return <Spinner />;
+            case 'success':
+                return <Component type={type} item={item}/>;
+            case 'failure':
+                return <ErrorView flex="column"/>
+            default:
+                throw new Error("Unexpected process state");
+        }
+    }
+
+    const content = setContent(process, ItemDetailsView, item);
+
     return (<>
-                <ItemDetailsView type={type} item={item}/>
-                <Spinner loaded={loaded}/>
-                <ErrorView error={error} errorMessage={errorMessage}/>
+                {content}
             </>);
 }
 
@@ -133,7 +150,7 @@ const ItemDetailsView = ({item, type}) => {
 
 DetailedView.propTypes = {
     id: PropTypes.number.isRequired,
-    type: PropTypes.oneOf(['comics', 'characters'])
+    type: PropTypes.oneOf(['comics', 'characters']).isRequired
 }
 
 export default DetailedView;
