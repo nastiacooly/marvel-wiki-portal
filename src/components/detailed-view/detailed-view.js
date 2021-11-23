@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 import useMarvelAPIService from '../../services/marvel-api-service';
 
@@ -69,17 +70,25 @@ const ItemDetailsView = ({item, type}) => {
 
     const {name, thumbnail, pages, price, description, language, homepage, wiki} = item;
 
-    const baseClassName = `${type}-info`;
+    const baseClassName = "item-info";
 
     /* Change styles for a "not found" image */
     const imageNotFound = "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg";
-    let imageClassNames = "comics-info__image";
+    let imageClassNames = `${baseClassName}__image`;
     if (thumbnail === imageNotFound) {
-        imageClassNames += " comics-info__image_fill";
+        imageClassNames += ` ${baseClassName}__image_fill`;
     }
     
     return (
         <div className={baseClassName}>
+            <Helmet>
+                <meta
+                    name="description"
+                    content={`Marvel Wiki Portal - ${name} details`}
+                    />
+                <title>{`Marvel Wiki Portal - ${name}`}</title>
+            </Helmet>
+
             <div className={imageClassNames}>
                 <img src={thumbnail} alt={`${name}`}/>
             </div>
@@ -98,7 +107,7 @@ const ItemDetailsView = ({item, type}) => {
 
                         <div className={`${baseClassName}__lang`}>Language: {language}</div>
 
-                        <span className="comics-info__price">{price}</span>
+                        <span className={`${baseClassName}__price`}>{price}</span>
                     </>
                     :
                     <>

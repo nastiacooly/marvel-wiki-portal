@@ -146,10 +146,6 @@ const useMarvelAPIService = (initialLoadedState = false) => {
         `;
         let description = character.description || noDescriptionMessage;
 
-        if (description.length >= 235) {
-            description = description.slice(0, 235) + "...";
-        }
-
         return {
             id: character.id,
             name: character.name,

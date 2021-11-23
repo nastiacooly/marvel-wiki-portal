@@ -31,7 +31,6 @@ const App = () => {
             <Routes>
               <Route path="marvel-wiki-portal/" element={<CharactersPage/>} />
               <Route path="/marvel-wiki-portal/characters" element={<CharactersPage/>} />
-              <Route path="/marvel-wiki-portal/:type/:id" element={<DetailsPage />} />
               <Route path="/marvel-wiki-portal/comics" element={<ComicsPage/>} />
               <Route path="/marvel-wiki-portal/:type/:id" element={<DetailsPage />} />
               <Route path="/marvel-wiki-portal/*" element={<NotFoundPage />}/>

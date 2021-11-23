@@ -91,6 +91,12 @@ const CharacterView = ({character}) => {
         imageClassNames += " random-character__image_contain";
     }
 
+    /* Shorten long desription */
+    let shortDescription = description;
+    if (description.length >= 235) {
+        shortDescription = description.slice(0, 235) + "...";
+    }
+
     return (
         <>
             <div className={imageClassNames}>
@@ -102,7 +108,7 @@ const CharacterView = ({character}) => {
                     {name}
                 </h3>
                 <p className="random-character__descr">
-                    {description}
+                    {shortDescription}
                 </p>
                 <div className="random-character__links">
                     <a href={homepage} className="app-button app-button_main">Homepage</a>

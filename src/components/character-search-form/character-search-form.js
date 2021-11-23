@@ -62,13 +62,19 @@ const CharacterSearchForm = () => {
                     
                     <div className="form__result">
                         <ErrorMessage name="name" component="div" className="form__error"/>
-                        {!character ? <div className="form__error">The character was not found. Please, check the name and try again.</div> : null}
-                        {character?.id ? 
-                            <>
-                                <div className="form__success">Found! Click to visit {character.name}'s page.</div>
-                                <a href={`/marvel-wiki-portal/characters/${character.id}`} className="app-button">To Page</a>
-                            </> : 
-                                null}
+                        {
+                            !character ? 
+                                <div className="form__error">The character was not found. Please, check the name and try again.</div> 
+                                : null
+                        }
+                        {
+                            character?.id ? 
+                                <>
+                                    <div className="form__success">Found! Click to visit {character.name}'s page.</div>
+                                    <a href={`/marvel-wiki-portal/characters/${character.id}`} className="app-button">To Page</a>
+                                </> 
+                                : null
+                        }
                     </div>
                     <Spinner loaded={loaded}/>
                     <ErrorView error={error}/>
