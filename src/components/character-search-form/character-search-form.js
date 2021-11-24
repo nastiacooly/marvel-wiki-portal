@@ -2,6 +2,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 
 import {useState, useEffect} from 'react';
+import { Link } from 'react-router-dom';
 
 import useMarvelAPIService from '../../services/marvel-api-service';
 
@@ -82,7 +83,7 @@ const CharacterSearchForm = () => {
                             character?.id ? 
                                 <>
                                     <div className="form__success">Found! Click to visit {character.name}'s page.</div>
-                                    <a href={`/marvel-wiki-portal/characters/${character.id}`} className="app-button">To Page</a>
+                                    <Link to={`/marvel-wiki-portal/characters/${character.id}`} className="app-button">To Page</Link>
                                 </> 
                                 : null
                         }
