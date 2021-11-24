@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useMemo} from 'react';
 import PropTypes from 'prop-types';
 
 import useMarvelAPIService from '../../services/marvel-api-service';
@@ -83,7 +83,9 @@ const CharactersList = (props) => {
     }
 
     /* Rendering */
-    const content = setListContent(process, () => mapToCharacterCards(characters, activeCharacterCard, onCharacterCardSelected));
+    const content = useMemo(() => {
+        return setListContent(process, () => mapToCharacterCards(characters, activeCharacterCard, onCharacterCardSelected));
+    }, [process]);
 
     return (
         <div className="characters-section">

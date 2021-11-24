@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useMemo} from 'react';
 
 import useMarvelAPIService from '../../services/marvel-api-service';
 import { setListContent } from '../../utils/setContent';
@@ -77,7 +77,9 @@ const ComicsList = () => {
     }
 
     /* Rendering */
-    const content = setListContent(process, () => mapToComicsCards(comics));
+    const content = useMemo(() => {
+        return setListContent(process, () => mapToComicsCards(comics));
+    }, [process]);
 
     return (
         <div className="comics-section">
