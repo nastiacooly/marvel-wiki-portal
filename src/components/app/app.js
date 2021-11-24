@@ -29,11 +29,11 @@ const App = () => {
         <main>
           <Suspense fallback={<Spinner />}>
             <Routes>
-              <Route path="marvel-wiki-portal/" element={<CharactersPage/>} />
-              <Route path="/marvel-wiki-portal/characters" element={<CharactersPage/>} />
-              <Route path="/marvel-wiki-portal/comics" element={<ComicsPage/>} />
-              <Route path="/marvel-wiki-portal/:type/:id" element={<DetailsPage />} />
-              <Route path="/marvel-wiki-portal/*" element={<NotFoundPage />}/>
+              <Route path={process.env.PUBLIC_URL + '/'} element={<CharactersPage/>} />
+              <Route path={process.env.PUBLIC_URL + '/characters'} element={<CharactersPage/>} />
+              <Route path={process.env.PUBLIC_URL + '/comics'} element={<ComicsPage/>} />
+              <Route path={process.env.PUBLIC_URL + '/:type/:id'} element={<DetailsPage />} />
+              <Route path={process.env.PUBLIC_URL + '/*'} element={<NotFoundPage />}/>
             </Routes>
           </Suspense>
         </main>
