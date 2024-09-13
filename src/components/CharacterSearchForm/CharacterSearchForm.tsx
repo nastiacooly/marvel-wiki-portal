@@ -19,7 +19,7 @@ export const CharacterSearchForm = () => {
 	const { process, setProcess, getCharacterByName, clearError } =
 		useMarvelApiService();
 
-	const [character, setCharacter] = useState<Character | null>(null);
+	const [character, setCharacter] = useState<Character | null>();
 
 	useEffect(() => {
 		setProcess(HttpRequestState.SUCCESS);
@@ -40,7 +40,7 @@ export const CharacterSearchForm = () => {
 		 * and saves it to the state of this component.
 		 */
 		clearError();
-		setCharacter(null);
+		setCharacter(undefined);
 
 		getCharacterByName(name)
 			.then(onCharacterFound)
@@ -69,7 +69,7 @@ export const CharacterSearchForm = () => {
 						<button
 							type="submit"
 							className="app-button app-button_main"
-							disabled={process === "loading"}
+							disabled={process === HttpRequestState.LOADING}
 						>
 							Find
 						</button>
@@ -77,7 +77,7 @@ export const CharacterSearchForm = () => {
 
 					<div className="form__result">
 						<ErrorMessage name="name" component="div" className="form__error" />
-						{!character ? (
+						{character === null ? (
 							<div className="form__error">
 								The character was not found. Please, check the name and try
 								again.
