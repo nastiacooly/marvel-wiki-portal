@@ -1,0 +1,1 @@
+import{j as t,L as a}from"./index-C885bgxo.js";import{E as o}from"./ErrorView-zBQUIs8h.js";const n=()=>t.jsxs("div",{children:[t.jsx(o,{message:"404 Page Not Found"}),t.jsx(a,{to:"/",className:"app-button app-button_main app-button_wide",children:"Back to Main Page"})]});export{n as default};
