@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"outDir": "./dist",
+		"allowJs": true,
+		"target": "esnext",
+		"lib": ["DOM", "DOM.Iterable", "ESNext"],
+		"types": ["vite/client"],
+		"isolatedModules": true,
+		"esModuleInterop": true,
+		"module": "ESNext",
+		"moduleResolution": "Node",
+		"forceConsistentCasingInFileNames": true,
+		"strict": true,
+		"jsx": "preserve"
+	},
+	"include": ["./src/**/*"]
+}
