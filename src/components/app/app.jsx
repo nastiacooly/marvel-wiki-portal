@@ -18,7 +18,7 @@ const DetailsPage = lazy(() => import("../pages/details-page"));
 
 const App = () => {
 	return (
-		<Router>
+		<Router basename={import.meta.env.BASE_URL}>
 			<div className="app-container">
 				<AppHeader />
 				<main>
