@@ -1,0 +1,1 @@
+import{j as a,L as o}from"./index-RqZ20kqp.js";import{E as t}from"./error-view-ufvuAc2J.js";const s=()=>a.jsxs("div",{children:[a.jsx(t,{errorMessage:"404 Page Not Found"}),a.jsx(o,{to:"/marvel-wiki-portal/",className:"app-button app-button_main app-button_wide",children:"Back to Main Page"})]});export{s as default};
