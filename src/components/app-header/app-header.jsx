@@ -1,32 +1,29 @@
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink } from "react-router-dom";
 
-import './app-header.scss';
+import "./app-header.scss";
 
-const AppHeader = () => {    
-    return (
-        <header className="app-header">
-            <h1 className="app-name">
-                <Link to="/marvel-wiki-portal/characters">
-                <span className="app-name__main-title">Marvel</span> Wiki Portal
-                </Link>
-            </h1>
+const AppHeader = () => {
+	return (
+		<header className="app-header">
+			<h1 className="app-name">
+				<Link to="/characters">
+					<span className="app-name__main-title">Marvel</span> Wiki Portal
+				</Link>
+			</h1>
 
-            <nav className="app-menu">
-                <ul className="app-menu__list">
-                    <li className='app-menu__item'>
-                        <NavLink to="/marvel-wiki-portal/characters">Characters</NavLink>
-                    </li>
-                    /
-                    <li className='app-menu__item'>
-                        <NavLink to="/marvel-wiki-portal/comics">Comics</NavLink>
-                    </li>
-                </ul>
-
-            </nav>
-
-        </header>
-    );
-
-}
+			<nav className="app-menu">
+				<ul className="app-menu__list">
+					<li className="app-menu__item">
+						<NavLink to="/characters">Characters</NavLink>
+					</li>
+					/
+					<li className="app-menu__item">
+						<NavLink to="/comics">Comics</NavLink>
+					</li>
+				</ul>
+			</nav>
+		</header>
+	);
+};
 
 export default AppHeader;
